@@ -1,0 +1,42 @@
+﻿<Properties StartupConfiguration="{62F6EECC-4EF9-40EC-BED3-FD5B64B81F26}|https">
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.Workbench ActiveDocument="event-platform/State/UserStore.cs">
+    <Files>
+      <File FileName="event-platform/Pages/Shared/_Layout.cshtml" Line="15" Column="64" />
+      <File FileName="event-platform/State/UserStore.cs" Line="12" Column="1" />
+      <File FileName="event-platform/Models/Users.cs" Line="12" Column="44" />
+      <File FileName="event-platform/Models/ScopeLevel.cs" Line="9" Column="3" />
+      <File FileName="event-platform/DataHandlers/UserHandler.cs" Line="23" Column="52" />
+      <File FileName="event-platform/Pages/Privacy.cshtml" Line="4" Column="42" />
+      <File FileName="event-platform/Pages/Index.cshtml" Line="10" Column="8" />
+      <File FileName="event-platform/Pages/Index.cshtml.cs" Line="19" Column="2" />
+      <File FileName="event-platform/Pages/Error.cshtml" Line="1" Column="1" />
+      <File FileName="event-platform/Pages/Privacy.cshtml.cs" Line="19" Column="1" />
+      <File FileName="event-platform/Pages/_ViewStart.cshtml" Line="1" Column="1" />
+      <File FileName="event-platform/Pages/Shared/_Layout.cshtml.css" Line="1" Column="1" />
+      <File FileName="event-platform/appsettings.json" Line="1" Column="1" />
+      <File FileName="event-platform/appsettings.Development.json" Line="1" Column="1" />
+      <File FileName="event-platform/Program.cs" Line="14" Column="27" />
+      <File FileName="event-platform/Startup.cs" Line="46" Column="31" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="event-platform" expanded="True" selected="True">
+            <Node name="event-platform" expanded="True">
+              <Node name="Properties" expanded="True" />
+              <Node name="State" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.event-platform PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
+  <Debugger.DebugSourceFolders />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+</Properties>

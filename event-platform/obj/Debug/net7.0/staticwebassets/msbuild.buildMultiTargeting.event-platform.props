@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/event-platform.props" />
+</Project>
