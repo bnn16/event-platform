@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using System;
 namespace event_platform.DataHandlers
 {
-	public class UseDBContext
+	public class UseDBContext : IdentityDbContext
 	{
-		public UseDBContext()
+		public UseDBContext(DbContextOptions<UseDBContext> options) : base(options)
 		{
+			
 		}
 	}
 }

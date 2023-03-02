@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using event_platform.DataHandlers;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace event_platform
 {
@@ -18,6 +21,19 @@ namespace event_platform
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddDbContext<UseDBContext>(options => {
+				options.UseSqlServer(Configuration.GetConnectionString("Default"));
+			});
+
+			services.AddIdentity<IdentityUser, IdentityRole>(
+					options => 
+					{ 
+						options.Password.RequiredLength = 8;
+						options.Password.RequireUppercase= true;
+						options.Password.RequireLowercase= true;
+						options.Lockout.MaxFailedAccessAttempts= 5;
+					}
+				).AddEntityFrameworkStores<UseDBContext>();
 			services.AddRazorPages();
 		}
 

@@ -1,3 +1,3 @@
 ﻿<Project>
-  <Import Project="../buildMultiTargeting/event-platform.props" />
+  <Import Project="..\buildMultiTargeting\event-platform.props" />
 </Project>
