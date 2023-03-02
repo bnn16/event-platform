@@ -2,6 +2,7 @@ using event_platform.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Policy;
 
 namespace event_platform.Pages.Account
 {
@@ -32,7 +33,9 @@ namespace event_platform.Pages.Account
             var res = await this.userManager.CreateAsync(user, RegisterViewModel.Password);
             if (res.Succeeded)
             {
-                return RedirectToPage("/Account/Login");
+                var conToken = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
+                return Redirect(Url.PageLink(pageName: "/Account/ConfirmEmail", values: new { userID = user.Id, token = conToken }));
+                //return RedirectToPage("/Account/Login");
             }
             else
             {
