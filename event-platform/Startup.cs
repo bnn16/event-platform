@@ -32,8 +32,17 @@ namespace event_platform
 						options.Password.RequireUppercase= true;
 						options.Password.RequireLowercase= true;
 						options.Lockout.MaxFailedAccessAttempts= 5;
+						options.Lockout.DefaultLockoutTimeSpan= TimeSpan.FromMinutes(5);
+						options.User.RequireUniqueEmail= true;
 					}
 				).AddEntityFrameworkStores<UseDBContext>();
+
+			services.ConfigureApplicationCookie(options =>
+			{
+				options.LoginPath = "/Account/Login";
+				options.AccessDeniedPath= "/Account/AccessDenied";
+
+			});
 			services.AddRazorPages();
 		}
 
