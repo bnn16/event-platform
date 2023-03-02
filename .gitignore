@@ -361,3 +361,11 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/event-platform/obj/Debug/net7.0/event-platform.csproj.CoreCompileInputs.cache
+/event-platform/obj/Debug/net7.0/event-platform.dll
+/event-platform/obj/Debug/net7.0/event-platform.GeneratedMSBuildEditorConfig.editorconfig
+/event-platform/obj/Debug/net7.0/event-platform.pdb
+/event-platform/obj/Debug/net7.0/ref/event-platform.dll
+/event-platform/obj/Debug/net7.0/refint/event-platform.dll
+/event-platform/bin/Debug/net7.0/event-platform.dll
+/event-platform/bin/Debug/net7.0/event-platform.pdb
