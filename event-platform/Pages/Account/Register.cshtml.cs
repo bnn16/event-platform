@@ -11,8 +11,10 @@ namespace event_platform.Pages.Account
     public class RegisterModel : PageModel
     {
         private readonly UserManager<IdentityUser> userManager;
-        public RegisterModel(UserManager<IdentityUser> userManager) { 
+        private readonly IEmailService emailService;
+        public RegisterModel(UserManager<IdentityUser> userManager, IEmailService emailService) { 
             this.userManager = userManager;
+            this.emailService = emailService; ;
         }
 
         [BindProperty]
@@ -38,16 +40,7 @@ namespace event_platform.Pages.Account
                 var conToken = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
                 var conLink = Url.PageLink(pageName: "/Account/ConfirmEmail", values: new { userID = user.Id, token = conToken });
 
-                var mailMsg = new MailMessage("b.nikolov@student.fontys.nl", user.Email, "Confirm your email address", $"Please click on this link to confirm the mail: {conLink}");
-                using (var email = new SmtpClient("smtp-relay.sendinblue.com", 587)) 
-                {
-                    //change to .env file to refactor the code or something?
-                    email.Credentials = new NetworkCredential("b.nikolov@student.fontys.nl", "HyQzRFhB0jX3W6Mt");
-
-                    await email.SendMailAsync(mailMsg);
-
-                }
-
+                await emailService.SendAsync("b.nikolov@student.fontys.nl", user.Email, "Confirm your email address", $"Please click on this link to confirm the mail: {conLink}");
 
                 return RedirectToPage("/Account/Login");
             }

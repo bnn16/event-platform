@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;	
 using System.Threading.Tasks;
 using event_platform.DataHandlers;
 using Microsoft.AspNetCore.Builder;
@@ -45,6 +46,11 @@ namespace event_platform
 				options.AccessDeniedPath= "/Account/AccessDenied";
 
 			});
+			services.Configure<SmtpSetting>(Configuration.GetSection("SMTP"));
+
+			services.AddSingleton<IEmailService, EmailService>();
+
+
 			services.AddRazorPages();
 		}
 

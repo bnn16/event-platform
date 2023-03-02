@@ -7,7 +7,7 @@ namespace event_platform.DataHandlers
 	{
 		public UseDBContext(DbContextOptions<UseDBContext> options) : base(options)
 		{
-			
+	
 		}
 	}
 }
