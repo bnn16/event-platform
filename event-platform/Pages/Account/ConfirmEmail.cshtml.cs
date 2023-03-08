@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace WebApp.Pages.Account
+namespace event_platform.Pages.Account
 {
     public class ConfirmEmailModel : PageModel
     {

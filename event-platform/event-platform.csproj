@@ -37,4 +37,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClassesEvent-Platform\ClassesEvent-Platform.csproj" />
+  </ItemGroup>
 </Project>
