@@ -4,7 +4,80 @@
      ViewData["Title"] = "Home page";
  }
 
- <div class="text-center">
-     <h1 class="display-4">Welcome</h1>
-     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
- </div>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Event List</title>
+    <style>
+        body {
+            background-color: #18122B;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        .event-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px;
+        }
+
+        .event-box {
+            width: 300px;
+            background-color: #393053;
+            border: 1px solid #443C68;
+            padding: 20px;
+            margin: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 5px;
+        }
+
+        .event-image {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .event-title {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #635985;
+        }
+
+        .event-description {
+            margin-top: 10px;
+            text-align: center;
+            color: #ccc;
+        }
+
+        .book-now-btn {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #635985;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+            .book-now-btn:hover {
+                background-color: #443C68;
+            }
+    </style>
+</head>
+<body>
+    <div class="event-container">
+        @foreach (var eventItem in Model.Events)
+        {
+            <div class="event-box">
+                <img class="event-image" src="@eventItem.ImageUrl" alt="@eventItem.Title" />
+                <div class="event-title">@eventItem.Title</div>
+                <div class="event-description">@eventItem.Description</div>
+                <a class="book-now-btn" href="/book/@eventItem.Id">Book Now</a>
+            </div>
+        }
+    </div>
+</body>
+</html>

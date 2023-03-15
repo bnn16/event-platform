@@ -1,0 +1,128 @@
+﻿body {
+    background-color: #18122B;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+a {
+    color: #635985;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #443C68;
+ }
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+button,
+input[type="submit"],
+.btn {
+    background-color: #635985;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button:hover,
+input[type="submit"]:hover,
+.btn:hover {
+    background-color: #443C68;
+}
+
+/* Change navbar background color */
+.navbar {
+    background-color: #393053 !important;
+}
+
+/* Change navbar brand color */
+.navbar-brand {
+    color: #635985 !important;
+}
+
+/* Change navbar link colors */
+.nav-link {
+    color: #635985 !important;
+}
+
+    /* Change navbar link hover colors */
+.nav-link:hover {
+    color: #443C68 !important;
+}
+
+/* Change the dropdown menu background color */
+.dropdown-menu {
+    background-color: #18122B !important;
+}
+
+/* Change the dropdown menu item color */
+.dropdown-item {
+    color: #635985 !important;
+}
+
+    /* Change the dropdown menu item hover color */
+.dropdown-item:hover {
+    color: #fff !important;
+    background-color: #443C68 !important;
+}
+
+/* Form inputs */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+select,
+textarea {
+    background-color: #443C68;
+    color: #fff;
+    border: 1px solid #635985;
+}
+
+/* Form validation error messages */
+.text-danger {
+    color: #ff5c5c;
+}
+
+/* Checkbox and label */
+.form-check-input {
+    border-color: #635985;
+    background-color: #443C68;
+}
+
+.form-check-label {
+    color: #ccc;
+}
+
+.login-container {
+    background-color: #393053;
+    border: 1px solid #443C68;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+
+/* Override the default button styles with dark mode colors */
+button,
+input[type="submit"],
+.btn {
+    background-color: #635985;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+    button:hover,
+    input[type="submit"]:hover,
+    .btn:hover {
+        background-color: #443C68;
+    }
+

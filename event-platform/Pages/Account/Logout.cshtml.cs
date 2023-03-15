@@ -13,6 +13,7 @@ namespace event_platform.Pages.Account
     {
         private readonly Microsoft.AspNetCore.Identity.SignInManager<IdentityUser> signInManager;
 
+        // need to dependency inject the sign in manager to detect if a user is signed in.
         public LogoutModel(SignInManager<IdentityUser> signInManager)
         {
             this.signInManager = signInManager;

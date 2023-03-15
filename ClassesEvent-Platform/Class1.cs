@@ -1,7 +1,7 @@
 ﻿namespace ClassesEvent_Platform
 {
-    public class LongPP
+    public class TestClass
     {
-        public LongPP() { }
+        public TestClass() { }
     }
 }
