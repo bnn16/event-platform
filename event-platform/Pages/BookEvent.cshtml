@@ -1,0 +1,10 @@
+﻿@page "/BookEvent/{id}"
+@model event_platform.Pages.BookEventModel
+@{
+    ViewData["Title"] = "Book Event";
+    var eventInfo = Model.GetEventById(Model.Id);
+}
+
+<h2>@eventInfo.Title</h2>
+<img src="@eventInfo.ImageUrl" alt="@eventInfo.Title" style="width: 100%; max-width: 400px;" />
+<p>@eventInfo.Description</p>
