@@ -15,7 +15,6 @@ namespace event_platform.Pages
 
         public void OnGet()
         {
-            Class1 aa = new Class1();
         }
     }
 }
