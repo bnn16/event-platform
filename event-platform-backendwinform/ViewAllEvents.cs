@@ -23,7 +23,8 @@ namespace event_platform_backendwinform
         {
             InitializeComponent();
             textBoxes = new TextBox[] { txtBoxArtist, txtBoxCapacity, txtBoxDescription, txtBoxEventType, txtBoxID, txtBoxName, txtBoxPrice, txtBoxVenue };
-
+            txtBoxVenue.Enabled = false;
+            txtBoxArtist.Enabled = false;
         }
         private DBController dbController = new DBController();
 
@@ -58,6 +59,7 @@ namespace event_platform_backendwinform
                 txtBoxVenue.Enabled = false;
                 txtBoxArtist.Enabled = false;
             }
+            oldEventType = newText;
         }
 
         int rid;
@@ -100,8 +102,7 @@ namespace event_platform_backendwinform
                     txtBoxVenue.Text = dataSet.Tables[0].Rows[0][8].ToString();
 
 
-                    //assign the old value + call the function from above!!
-                    oldEventType = txtBoxEventType.Text;
+                    //assign the old value + call the function from above
 
                     txtBoxEventType.TextChanged += TxtBoxEventType_TextChanged;
                 }
@@ -133,17 +134,23 @@ namespace event_platform_backendwinform
                     //todo bug -> decimal to int wrong format??? need to fix asap
                     var Price = Convert.ToInt32(txtBoxPrice.Text);
                     var _eventManager = new EventManager(new ConcertEventStrategy());
-                    var updatedEvent = _eventManager.CreateConcertEvent(Int32.Parse(txtBoxID.Text), txtBoxName.Text, txtBoxDescription.Text, dateTimePicker1.Value, Price, txtBoxEventType.Text, Int32.Parse(txtBoxCapacity.Text), txtBoxArtist.Text, txtBoxVenue.Text); ;
+                    var updatedConcert = _eventManager.CreateConcertEvent(Int32.Parse(txtBoxID.Text), txtBoxName.Text, txtBoxDescription.Text, dateTimePicker1.Value, Price, txtBoxEventType.Text, Int32.Parse(txtBoxCapacity.Text), txtBoxArtist.Text, txtBoxVenue.Text); ;
 
                     //clear the txtBoxes
-                    var updatedBool = await dbController.UpdateConcertEventAsync(updatedEvent, rid);
-                    foreach (TextBox textBox in textBoxes)
+                    var updatedBoolConcert = await dbController.UpdateEventAsync(updatedConcert, rid, updatedConcert.Artist, updatedConcert.Venue);
+                    if (updatedBoolConcert)
                     {
-                        textBox.Clear();
+                        MessageBox.Show("Success!", "Gratz you edited the Concert!");
+                        foreach (TextBox textBox in textBoxes)
+                        {
+                            textBox.Clear();
+                        }
+                        //update the datagridview 
+                        var datatable = dbController.GetAllEvents();
+                        dataGridView1.DataSource = datatable;
+
+
                     }
-                    //update the datagridview 
-                    var datatable = dbController.GetAllEvents();
-                    dataGridView1.DataSource = datatable;
                 }
                 catch (Exception ex)
                 {
@@ -152,7 +159,36 @@ namespace event_platform_backendwinform
             }
             if (txtBoxEventType.Text == "Event")
             {
-                //todo
+                try
+                {
+                    var _eventManager = new EventManager(new EventStrategy());
+
+                    var updatedEvent = _eventManager.CreateEvent(Int32.Parse(txtBoxID.Text), txtBoxName.Text, txtBoxDescription.Text, dateTimePicker1.Value, Convert.ToInt32(txtBoxPrice.Text), txtBoxEventType.Text, Int32.Parse(txtBoxCapacity.Text));
+
+                    var updateBoolEvent = await dbController.UpdateEventAsync(updatedEvent, rid);
+
+                    if (updateBoolEvent)
+                    {
+                        MessageBox.Show("Success!", "Gratz you edited the Event!");
+                        foreach (TextBox textBox in textBoxes)
+                        {
+                            textBox.Clear();
+                        }
+                        //update the datagridview 
+                        var datatable = dbController.GetAllEvents();
+                        dataGridView1.DataSource = datatable;
+
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            else 
+            {
+                MessageBox.Show("Error!", "Please stick to the event types : Event and Concert !");
             }
         }
     }

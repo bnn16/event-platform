@@ -42,16 +42,22 @@ namespace event_platform_classLibrary
                 }
             }
         }
-
-        public async Task<bool> UpdateConcertEventAsync(ConcertEvent _event, int rId)
+        //todo UpdateEventAsync and UpdateConcertAsync share common logic, combine the 2 methods into one
+        //done, added the if statement to concat the string so I can check the events/type
+        public async Task<bool> UpdateEventAsync(Event _event, int rId, string artist = null, string venue = null)
         {
-            bool ev;
             SqlConnection con = new SqlConnection(_connectionString);
             await con.OpenAsync();
 
             using (var eventCommand = con.CreateCommand())
             {
-                eventCommand.CommandText = "UPDATE Events SET Id = @newId, Name = @name, Description = @descr, Date = @date, Price = @price, EventType = @eventT, Capacity = @capacity WHERE Id = @oldId";
+                string updateCommand = "UPDATE Events SET Id = @newId, Name = @name, Description = @descr, Date = @date, Price = @price, EventType = @eventT, Capacity = @capacity WHERE Id = @oldId";
+                if (artist != null && venue != null)
+                {
+                    updateCommand += "; UPDATE Concerts set Artist = @artist, Venue = @venue where EventId = @newId";
+                }
+                eventCommand.CommandText = updateCommand;
+
                 eventCommand.Parameters.AddWithValue("@oldId", rId);
                 eventCommand.Parameters.AddWithValue("@name", _event.Name);
                 eventCommand.Parameters.AddWithValue("@descr", _event.Description);
@@ -60,20 +66,18 @@ namespace event_platform_classLibrary
                 eventCommand.Parameters.AddWithValue("@eventT", _event.EventType);
                 eventCommand.Parameters.AddWithValue("@capacity", _event.Capacity);
                 eventCommand.Parameters.AddWithValue("@newId", _event.Id);
+                if (artist != null && venue != null)
+                {
+                    eventCommand.Parameters.AddWithValue("@artist", artist);
+                    eventCommand.Parameters.AddWithValue("@venue", venue);
+                }
 
-                int rowsAffected = await eventCommand.ExecuteNonQueryAsync();
-                if (rowsAffected > 0)
-                {
-                    ev = true;
-                }
-                else
-                {
-                    ev = false;
-                }
+                return await eventCommand.ExecuteNonQueryAsync() > 0;
             }
-
-            return ev;
         }
+
+
+
 
 
 
