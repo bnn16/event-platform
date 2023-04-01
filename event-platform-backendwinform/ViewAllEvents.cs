@@ -1,18 +1,6 @@
 ﻿using event_platform_classLibrary;
 using event_platform_classLibrary.EventHandlers;
-using Microsoft.Data.SqlClient;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Globalization;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using TextBox = System.Windows.Forms.TextBox;
 
 namespace event_platform_backendwinform
@@ -35,8 +23,6 @@ namespace event_platform_backendwinform
 
             dataGridView1.DataSource = datatable;
         }
-
-
 
         //this checks if the event type is either a concert or a normal event, dynamically show/hide the txtBoxes to Update the database!
         private string oldEventType;
@@ -123,8 +109,6 @@ namespace event_platform_backendwinform
                 dataGridView1.DataSource = datatable;
             }
         }
-
-
 
         private async void btnEditEvent_Click(object sender, EventArgs e)
         {

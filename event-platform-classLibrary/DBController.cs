@@ -1,19 +1,22 @@
 ﻿using event_platform_classLibrary.EventHandlers.Classes;
 using Microsoft.Data.SqlClient;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics.Tracing;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace event_platform_classLibrary
 {
     public class DBController
     {
-        private readonly string _connectionString = "Server=BNNXD\\SQLEXPRESS;Database=smilevents;Trusted_Connection=True;TrustServerCertificate=True;";
+        private readonly string _connectionString;
+        public DBController()
+        {
+            //todo add connection string with .env
+            //Env.Load();
+            //_connectionString = Environment.GetEnvironmentVariable("SQLSERVER_CONNECTIONSTRING");
+            _connectionString = "Server=BNNXD\\SQLEXPRESS;Database=smilevents;Trusted_Connection=True;TrustServerCertificate=True;";
+
+        }
+    
 
         public async Task<bool> AddEventAsync(Event _event)
         {
@@ -152,9 +155,6 @@ namespace event_platform_classLibrary
                 }
             }
         }
-
-
-
         public DataTable GetAllEvents()
         {
             DataTable dataTable = new DataTable();
@@ -179,7 +179,6 @@ namespace event_platform_classLibrary
 
             return dataTable;
         }
-
 
         //joins the tables via Id/EventId
         public DataSet GetEventById(int id)

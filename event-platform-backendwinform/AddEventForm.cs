@@ -14,9 +14,11 @@ namespace event_platform_backendwinform
 {
     public partial class AddEventForm : Form
     {
+        private TextBox[] textBoxes;
         public AddEventForm()
         {
             InitializeComponent();
+            textBoxes = new TextBox[] { txtBoxArtist, txtBoxConcertID, Capacity, txtBoxConcertName, txtBoxID, txtBoxName, txtBoxName, txtBoxVenue };
         }
 
         public DBController dBController = new DBController();
@@ -32,9 +34,14 @@ namespace event_platform_backendwinform
                 bool a = await dBController.AddEventAsync(concertEvent);
                 if (a == true)
                 {
+                    foreach (TextBox textBox in textBoxes)
+                    {
+                        rtxtBoxConcertDescription.Clear();
+                        rbTxtBoxDescription.Clear();
+                        textBox.Clear();
+                    }
                     MessageBox.Show("Event added!", "Congrats!!!!");
                 }
-                else { }
             }
             catch (Exception ex)
             {
@@ -52,9 +59,14 @@ namespace event_platform_backendwinform
                 bool a = await dBController.AddConcertAsync(concertEvent);
                 if (a == true)
                 {
+                    foreach (TextBox textBox in textBoxes)
+                    {
+                        rtxtBoxConcertDescription.Clear();
+                        rbTxtBoxDescription.Clear();
+                        textBox.Clear();
+                    }
                     MessageBox.Show("Concert added!", "Congrats!!!! Let's rock and roll!");
                 }
-                else { }
             }
             catch (Exception ex)
             {
