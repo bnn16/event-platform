@@ -22,7 +22,7 @@ namespace event_platform_backendwinform
         public ViewAllEvents()
         {
             InitializeComponent();
-            textBoxes = new TextBox[] { txtBoxArtist,txtBoxCapacity,txtBoxDescription,txtBoxEventType,txtBoxID,txtBoxName,txtBoxPrice,txtBoxVenue };
+            textBoxes = new TextBox[] { txtBoxArtist, txtBoxCapacity, txtBoxDescription, txtBoxEventType, txtBoxID, txtBoxName, txtBoxPrice, txtBoxVenue };
 
         }
         private DBController dbController = new DBController();
@@ -33,6 +33,33 @@ namespace event_platform_backendwinform
 
             dataGridView1.DataSource = datatable;
         }
+
+
+
+        //this checks if the event type is either a concert or a normal event, dynamically show/hide the txtBoxes to Update the database!
+        private string oldEventType;
+
+        private void TxtBoxEventType_TextChanged(object? sender, EventArgs e)
+        {
+            string newText = txtBoxEventType.Text;
+
+            if (oldEventType == "Event" && newText == "Concert")
+            {
+                txtBoxVenue.Enabled = true;
+                txtBoxArtist.Enabled = true;
+            }
+            else if (newText == "Concert")
+            {
+                txtBoxVenue.Enabled = true;
+                txtBoxArtist.Enabled = true;
+            }
+            else
+            {
+                txtBoxVenue.Enabled = false;
+                txtBoxArtist.Enabled = false;
+            }
+        }
+
         int rid;
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -71,16 +98,12 @@ namespace event_platform_backendwinform
                     txtBoxCapacity.Text = dataSet.Tables[0].Rows[0][6].ToString();
                     txtBoxArtist.Text = dataSet.Tables[0].Rows[0][7].ToString();
                     txtBoxVenue.Text = dataSet.Tables[0].Rows[0][8].ToString();
-                    if (txtBoxVenue.Text == "" && txtBoxArtist.Text == "")
-                    {
-                        txtBoxVenue.Enabled = false;
-                        txtBoxArtist.Enabled = false;
-                    }
-                    else
-                    {
-                        txtBoxVenue.Enabled = true;
-                        txtBoxArtist.Enabled = true;
-                    }
+
+
+                    //assign the old value + call the function from above!!
+                    oldEventType = txtBoxEventType.Text;
+
+                    txtBoxEventType.TextChanged += TxtBoxEventType_TextChanged;
                 }
             }
         }
@@ -99,16 +122,18 @@ namespace event_platform_backendwinform
             }
         }
 
+
+
         private async void btnEditEvent_Click(object sender, EventArgs e)
         {
-            if (txtBoxEventType.Text == "Concert") 
+            if (txtBoxEventType.Text == "Concert")
             {
                 try
                 {
                     //todo bug -> decimal to int wrong format??? need to fix asap
                     var Price = Convert.ToInt32(txtBoxPrice.Text);
                     var _eventManager = new EventManager(new ConcertEventStrategy());
-                    var updatedEvent = _eventManager.CreateConcertEvent(Int32.Parse(txtBoxID.Text), txtBoxName.Text, txtBoxDescription.Text, dateTimePicker1.Value, Price, txtBoxEventType.Text, Int32.Parse(txtBoxCapacity.Text),txtBoxArtist.Text,txtBoxVenue.Text); ;
+                    var updatedEvent = _eventManager.CreateConcertEvent(Int32.Parse(txtBoxID.Text), txtBoxName.Text, txtBoxDescription.Text, dateTimePicker1.Value, Price, txtBoxEventType.Text, Int32.Parse(txtBoxCapacity.Text), txtBoxArtist.Text, txtBoxVenue.Text); ;
 
                     //clear the txtBoxes
                     var updatedBool = await dbController.UpdateConcertEventAsync(updatedEvent, rid);
@@ -125,7 +150,8 @@ namespace event_platform_backendwinform
                     MessageBox.Show(ex.Message);
                 }
             }
-            if (txtBoxEventType.Text == "Event") { 
+            if (txtBoxEventType.Text == "Event")
+            {
                 //todo
             }
         }
