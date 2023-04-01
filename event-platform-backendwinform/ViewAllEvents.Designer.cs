@@ -37,9 +37,9 @@
             label2 = new Label();
             txtBoxArtist = new TextBox();
             txtBoxPrice = new TextBox();
-            btnDeleteBook = new Button();
+            btnDelete = new Button();
             label9 = new Label();
-            btnEditBook = new Button();
+            btnEditEvent = new Button();
             txtBoxID = new TextBox();
             label3 = new Label();
             txtBoxCapacity = new TextBox();
@@ -95,9 +95,9 @@
             panel1.Controls.Add(label2);
             panel1.Controls.Add(txtBoxArtist);
             panel1.Controls.Add(txtBoxPrice);
-            panel1.Controls.Add(btnDeleteBook);
+            panel1.Controls.Add(btnDelete);
             panel1.Controls.Add(label9);
-            panel1.Controls.Add(btnEditBook);
+            panel1.Controls.Add(btnEditEvent);
             panel1.Controls.Add(txtBoxID);
             panel1.Controls.Add(label3);
             panel1.Controls.Add(txtBoxCapacity);
@@ -158,14 +158,14 @@
             txtBoxPrice.Size = new Size(204, 23);
             txtBoxPrice.TabIndex = 38;
             // 
-            // btnDeleteBook
+            // btnDelete
             // 
-            btnDeleteBook.Location = new Point(656, 86);
-            btnDeleteBook.Name = "btnDeleteBook";
-            btnDeleteBook.Size = new Size(83, 58);
-            btnDeleteBook.TabIndex = 2;
-            btnDeleteBook.Text = "Delete\r\nBook";
-            btnDeleteBook.UseVisualStyleBackColor = true;
+            btnDelete.Location = new Point(656, 86);
+            btnDelete.Name = "btnDelete";
+            btnDelete.Size = new Size(83, 58);
+            btnDelete.TabIndex = 2;
+            btnDelete.Text = "Delete\r";
+            btnDelete.UseVisualStyleBackColor = true;
             // 
             // label9
             // 
@@ -178,14 +178,15 @@
             label9.TabIndex = 33;
             label9.Text = "Capacity";
             // 
-            // btnEditBook
+            // btnEditEvent
             // 
-            btnEditBook.Location = new Point(656, 12);
-            btnEditBook.Name = "btnEditBook";
-            btnEditBook.Size = new Size(83, 58);
-            btnEditBook.TabIndex = 1;
-            btnEditBook.Text = "Edit \r\nBook";
-            btnEditBook.UseVisualStyleBackColor = true;
+            btnEditEvent.Location = new Point(656, 12);
+            btnEditEvent.Name = "btnEditEvent";
+            btnEditEvent.Size = new Size(83, 58);
+            btnEditEvent.TabIndex = 1;
+            btnEditEvent.Text = "Edit";
+            btnEditEvent.UseVisualStyleBackColor = true;
+            btnEditEvent.Click += btnEditEvent_Click;
             // 
             // txtBoxID
             // 
@@ -321,9 +322,9 @@
         private Label label1;
         private DataGridView dataGridView1;
         private Panel panel1;
-        private Button btnDeleteBook;
+        private Button btnDelete;
         private Label label9;
-        private Button btnEditBook;
+        private Button btnEditEvent;
         private TextBox txtBoxID;
         private Label label3;
         private TextBox txtBoxCapacity;

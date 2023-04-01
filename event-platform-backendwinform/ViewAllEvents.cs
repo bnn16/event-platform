@@ -1,4 +1,5 @@
 ﻿using event_platform_classLibrary;
+using event_platform_classLibrary.EventHandlers;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -10,14 +11,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using TextBox = System.Windows.Forms.TextBox;
 
 namespace event_platform_backendwinform
 {
     public partial class ViewAllEvents : Form
     {
+        private TextBox[] textBoxes;
         public ViewAllEvents()
         {
             InitializeComponent();
+            textBoxes = new TextBox[] { txtBoxArtist,txtBoxCapacity,txtBoxDescription,txtBoxEventType,txtBoxID,txtBoxName,txtBoxPrice,txtBoxVenue };
+
         }
         private DBController dbController = new DBController();
 
@@ -90,6 +96,37 @@ namespace event_platform_backendwinform
             {
                 var datatable = dbController.GetAllEvents();
                 dataGridView1.DataSource = datatable;
+            }
+        }
+
+        private async void btnEditEvent_Click(object sender, EventArgs e)
+        {
+            if (txtBoxEventType.Text == "Concert") 
+            {
+                try
+                {
+                    //todo bug -> decimal to int wrong format??? need to fix asap
+                    var Price = Convert.ToInt32(txtBoxPrice.Text);
+                    var _eventManager = new EventManager(new ConcertEventStrategy());
+                    var updatedEvent = _eventManager.CreateConcertEvent(Int32.Parse(txtBoxID.Text), txtBoxName.Text, txtBoxDescription.Text, dateTimePicker1.Value, Price, txtBoxEventType.Text, Int32.Parse(txtBoxCapacity.Text),txtBoxArtist.Text,txtBoxVenue.Text); ;
+
+                    //clear the txtBoxes
+                    var updatedBool = await dbController.UpdateConcertEventAsync(updatedEvent, rid);
+                    foreach (TextBox textBox in textBoxes)
+                    {
+                        textBox.Clear();
+                    }
+                    //update the datagridview 
+                    var datatable = dbController.GetAllEvents();
+                    dataGridView1.DataSource = datatable;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            if (txtBoxEventType.Text == "Event") { 
+                //todo
             }
         }
     }
