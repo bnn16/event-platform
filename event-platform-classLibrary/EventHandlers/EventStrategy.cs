@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using event_platform_classLibrary.EventHandlers.Classes;
 
 namespace event_platform_classLibrary.EventHandlers
 {
     public class EventStrategy : IEventStrategy
     {
-        public EventStrategy()
+        public Event CreateEvent(int id, string name, string description, DateTime date, int price, string eventType, int capacity)
         {
+            return new Event(id, name, description, date, price, eventType, capacity);
         }
 
-        public Event CreateEvent(int id, string name, DateTime date, int price, string eventType, int capacity)
+        // Throw NotImplementedException for CreateConcertEvent method since this strategy only creates events
+        public ConcertEvent CreateConcertEvent(int id, string name, string description, DateTime date, int price, string eventType, int capacity, string artist, string venue)
         {
-            return new Event(id, name, date, price, eventType, capacity);
+            throw new NotImplementedException("CreateConcertEvent method is not implemented");
         }
     }
 }

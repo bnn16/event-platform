@@ -11,27 +11,10 @@ namespace event_platform_backendwinform
         {
             InitializeComponent();
         }
-        public DBController dBController = new DBController();
-
-        private async void button1_ClickAsync(object sender, EventArgs e)
+        private void addEventToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var _eventManager = new EventManager(new EventStrategy());
-            
-            var concertEvent = _eventManager.CreateEvent(Convert.ToInt32(txtBoxID.Text), txtBoxName.Text, dateTimePicker1.Value, Convert.ToInt32(numPrice.Text), txtBoxEventType.Text, Convert.ToInt32(Capacity.Text));
-
-            try
-            {
-                bool a = await dBController.AddEventAsync(concertEvent);
-                if (a == true)
-                {
-                    MessageBox.Show("Event added!", "Congrats!!!!");
-                }
-                else { }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            AddEventForm abs = new AddEventForm();
+            abs.Show();
         }
     }
 }

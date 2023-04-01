@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace event_platform_classLibrary.EventHandlers
+namespace event_platform_classLibrary.EventHandlers.Classes
 {
     public class Booking
     {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using event_platform_classLibrary.EventHandlers.Classes;
 
 namespace event_platform_classLibrary.EventHandlers
 {
@@ -13,11 +14,14 @@ namespace event_platform_classLibrary.EventHandlers
         {
             _eventStrategy = eventStrategy;
         }
-        public Event CreateEvent(int id, string name, DateTime date, int price, string eventType, int capacity)
+        public Event CreateEvent(int id, string name, string description, DateTime date, int price, string eventType, int capacity)
         {
-            return _eventStrategy.CreateEvent(id, name, date, price, eventType, capacity);
+            return _eventStrategy.CreateEvent(id, name, description, date, price, eventType, capacity);
         }
 
-
+        public ConcertEvent CreateConcertEvent(int id, string name, string description, DateTime date, int price, string eventType, int capacity, string artist, string venue) 
+        { 
+            return _eventStrategy.CreateConcertEvent(id,name, description, date, price, eventType, capacity, artist, venue);
+        }
     }
 }
