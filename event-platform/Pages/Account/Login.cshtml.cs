@@ -35,7 +35,7 @@ namespace event_platform.Pages.Account
             }
             //verify the users credentials (can be a bit cleaner) todo: clean up code
             User user = null;
-            user = _dbController.GetUserByUsernameOrEmail(Input.UsernameOrEmail);
+            user = _dbController.GetUserByUsernameOrEmail(Input);
             if (user == null || !BCrypt.Net.BCrypt.Verify(Input.Password, user.PasswordHash))
             {
                 ModelState.AddModelError("", "Invalid login attempt.");
