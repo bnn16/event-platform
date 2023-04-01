@@ -5,16 +5,22 @@ using System.Xml.Linq;
 
 namespace event_platform_backendwinform
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
         }
         private void addEventToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddEventForm abs = new AddEventForm();
-            abs.Show();
+            AddEventForm newForm = new AddEventForm();
+            newForm.Show();
+        }
+
+        private void viewAllEventsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ViewAllEvents newForm = new ViewAllEvents();
+            newForm.Show();
         }
     }
 }

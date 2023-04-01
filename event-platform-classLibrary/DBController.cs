@@ -2,6 +2,7 @@
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -97,6 +98,52 @@ namespace event_platform_classLibrary
                 return false;
             }
 
+        }
+
+        public DataTable GetAllEvents()
+        {
+            DataTable dataTable = new DataTable();
+
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = con;
+                cmd.CommandText = "SELECT E.*, C.* " +
+                                   "FROM Events E " +
+                                   "LEFT JOIN Concerts C ON E.Id = C.EventId " +
+                                   "UNION " +
+                                   "SELECT E.*, NULL AS C_Id, NULL AS Artist, NULL AS Venue " +
+                                   "FROM Events E " +
+                                   "WHERE NOT EXISTS (SELECT 1 FROM Concerts C WHERE C.EventId = E.Id)";
+
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                {
+                    da.Fill(dataTable);
+                }
+            }
+
+            return dataTable;
+        }
+
+
+        //joins the tables via Id/EventId
+        public DataSet GetEventById(int id)
+        {
+            DataSet dataSet = new DataSet();
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = con;
+                cmd.CommandText = "SELECT E.*, C.Artist, C.Venue FROM Events E LEFT JOIN Concerts C ON E.Id = C.EventId WHERE E.Id = @id";
+                cmd.Parameters.AddWithValue("@id", id);
+
+                // Use a SqlDataAdapter to fill a DataSet with the results of the query
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                {
+                    da.Fill(dataSet);
+                }
+            }
+            return dataSet;
         }
     }
 }

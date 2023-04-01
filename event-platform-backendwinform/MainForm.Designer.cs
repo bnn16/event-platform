@@ -1,6 +1,6 @@
 ﻿namespace event_platform_backendwinform
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -71,6 +71,7 @@
             viewAllEventsToolStripMenuItem.Name = "viewAllEventsToolStripMenuItem";
             viewAllEventsToolStripMenuItem.Size = new Size(196, 38);
             viewAllEventsToolStripMenuItem.Text = "View all events";
+            viewAllEventsToolStripMenuItem.Click += viewAllEventsToolStripMenuItem_Click;
             // 
             // usersToolStripMenuItem
             // 
