@@ -8,6 +8,7 @@ using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -62,7 +63,7 @@ namespace event_platform_backendwinform
             oldEventType = newText;
         }
 
-        int rid;
+        int selectedEventId;
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -81,7 +82,7 @@ namespace event_platform_backendwinform
                 if (dataSet.Tables[0].Rows.Count > 0)
                 {
                     CultureInfo provider = new CultureInfo("en-US");
-                    rid = int.Parse(dataSet.Tables[0].Rows[0][0].ToString());
+                    selectedEventId = int.Parse(dataSet.Tables[0].Rows[0][0].ToString());
                     txtBoxID.Text = dataSet.Tables[0].Rows[0][0].ToString();
                     txtBoxName.Text = dataSet.Tables[0].Rows[0][1].ToString();
                     txtBoxDescription.Text = dataSet.Tables[0].Rows[0][2].ToString();
@@ -137,7 +138,7 @@ namespace event_platform_backendwinform
                     var updatedConcert = _eventManager.CreateConcertEvent(Int32.Parse(txtBoxID.Text), txtBoxName.Text, txtBoxDescription.Text, dateTimePicker1.Value, Price, txtBoxEventType.Text, Int32.Parse(txtBoxCapacity.Text), txtBoxArtist.Text, txtBoxVenue.Text); ;
 
                     //clear the txtBoxes
-                    var updatedBoolConcert = await dbController.UpdateEventAsync(updatedConcert, rid, updatedConcert.Artist, updatedConcert.Venue);
+                    var updatedBoolConcert = await dbController.UpdateEventAsync(updatedConcert, selectedEventId, updatedConcert.Artist, updatedConcert.Venue);
                     if (updatedBoolConcert)
                     {
                         MessageBox.Show("Success!", "Gratz you edited the Concert!");
@@ -165,7 +166,7 @@ namespace event_platform_backendwinform
 
                     var updatedEvent = _eventManager.CreateEvent(Int32.Parse(txtBoxID.Text), txtBoxName.Text, txtBoxDescription.Text, dateTimePicker1.Value, Convert.ToInt32(txtBoxPrice.Text), txtBoxEventType.Text, Int32.Parse(txtBoxCapacity.Text));
 
-                    var updateBoolEvent = await dbController.UpdateEventAsync(updatedEvent, rid);
+                    var updateBoolEvent = await dbController.UpdateEventAsync(updatedEvent, selectedEventId);
 
                     if (updateBoolEvent)
                     {
@@ -186,10 +187,36 @@ namespace event_platform_backendwinform
                     MessageBox.Show(ex.Message);
                 }
             }
-            else 
+            else
             {
                 MessageBox.Show("Error!", "Please stick to the event types : Event and Concert !");
             }
+        }
+
+        private async void btnDelete_ClickAsync(object sender, EventArgs e)
+        {
+            DialogResult dresult = MessageBox.Show("Are you sure you want to delete the event?!", "Alert", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (dresult == DialogResult.OK)
+            {
+                try
+                {
+                    var deleteBoolEvent = await dbController.DeleteEvent(selectedEventId);
+                    MessageBox.Show("Event Succesfully Deleted","Success");
+
+                    foreach (TextBox textBox in textBoxes)
+                    {
+                        textBox.Clear();
+                    }
+                    var datatable = dbController.GetAllEvents();
+                    dataGridView1.DataSource = datatable;
+                }
+
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+           
         }
     }
 }

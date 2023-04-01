@@ -76,11 +76,6 @@ namespace event_platform_classLibrary
             }
         }
 
-
-
-
-
-
         public async Task<bool> AddConcertAsync(ConcertEvent _event)
         {
             bool comm1;
@@ -139,6 +134,26 @@ namespace event_platform_classLibrary
             }
 
         }
+
+        public async Task<bool> DeleteEvent(int id)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                await con.OpenAsync();
+                using (SqlCommand cmd = new SqlCommand("delete from events where Id = @id", con))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    int rowsAffected = await cmd.ExecuteNonQueryAsync();
+                    if (rowsAffected > 0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+        }
+
+
 
         public DataTable GetAllEvents()
         {

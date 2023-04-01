@@ -166,6 +166,7 @@
             btnDelete.TabIndex = 2;
             btnDelete.Text = "Delete\r";
             btnDelete.UseVisualStyleBackColor = true;
+            btnDelete.Click += btnDelete_ClickAsync;
             // 
             // label9
             // 
