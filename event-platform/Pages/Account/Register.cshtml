@@ -1,0 +1,114 @@
+﻿@page "/Account/Register"
+@model event_platform_classLibrary.RegisterBindModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.6/dist/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <style>
+        body {
+            background-color: #f9f9f9;
+            overflow-x: hidden;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+        }
+
+        .logo-container {
+            width: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fbae17;
+        }
+
+            .logo-container img {
+                max-width: 100%;
+                max-height: 100%;
+            }
+
+        .form-container {
+            width: 50%;
+            padding: 2rem;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100vh;
+            box-shadow: inset -8px 0 10px -6px #212529;
+        }
+
+            .form-container h1 {
+                color: #333333;
+            }
+
+            .form-container .btn-primary {
+                background-color: #fbae17;
+                border-color: #fbae17;
+            }
+
+                .form-container .btn-primary:hover {
+                    background-color: #007bff;
+                    border-color: #007bff;
+                }
+    </style>
+    <link rel="stylesheet" href="temp.css" />
+</head>
+<body>
+    <div class="form-container">
+        <div id="register-form">
+            <h1 class="text-center mb-4">Register</h1>
+            <form method="post" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="username" class="form-label text-dark">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+                    <div class="invalid-feedback">
+                        Please enter your desired username.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label text-dark">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+                    <div class="invalid-feedback">
+                        Please enter a valid email address.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label text-dark">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                    <div class="invalid-feedback">
+                        Please enter a password.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="confirmPassword" class="form-label text-dark">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+                    <div class="invalid-feedback">
+                        Please confirm your password.
+                    </div>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+            </form>
+            <p class="text-center text-dark mt-3">
+                Already have an account?
+                <a href="/Account/Login" id="show-login" class="text-primary">Login</a>
+            </p>
+        </div>
+
+   </div>
+    <div class="logo-container">
+        <img src="/images/logo.png" alt="Your Logo" width="300" />
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-qzTdrN8U6W9U6SdPs6LlUj+q3sD4Q4YYxk+c6T+TbDR1W6U9e6M4TEOBl1+M3qru" crossorigin="anonymous"></script>
+</body>
+</html>

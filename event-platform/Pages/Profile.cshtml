@@ -1,0 +1,28 @@
+﻿@page
+@model event_platform.Pages.ProfileModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="container mt-5">
+    <h1 class="mb-4">@Model.User.Username's Profile</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card bg-dark text-white">
+                <div class="card-body">
+                    <p class="card-text">Your email: <br /> @Model.User.Email</p>
+                    <p class="card-text">Your Description: <br /> @Model.User.Description</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <form asp-action="EditDescription" method="post">
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description:</label>
+                    <textarea class="form-control" id="description" name="description">@Model.User.Description</textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+        </div>
+    </div>
+</div>

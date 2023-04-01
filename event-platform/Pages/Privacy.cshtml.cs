@@ -14,6 +14,10 @@ namespace event_platform.Pages
 
         public void OnGet()
         {
+            if (!HttpContext.Request.Cookies.ContainsKey("username"))
+            {
+                Response.Redirect("/Account/Login");
+            }
         }
     }
 }
