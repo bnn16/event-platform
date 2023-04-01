@@ -78,5 +78,19 @@ namespace event_platform_backendwinform
                 }
             }
         }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (Filter.Text != "")
+            {
+                var filter = dbController.GetEventByFilter(Filter.Text);
+                dataGridView1.DataSource = filter;
+            }
+            else
+            {
+                var datatable = dbController.GetAllEvents();
+                dataGridView1.DataSource = datatable;
+            }
+        }
     }
 }

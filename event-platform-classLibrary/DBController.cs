@@ -145,5 +145,22 @@ namespace event_platform_classLibrary
             }
             return dataSet;
         }
+
+        public DataTable GetEventByFilter(string filter) 
+        {
+            DataTable dataTable = new DataTable();
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            using (SqlCommand cmd = new SqlCommand()) 
+            { 
+                cmd.Connection = con;
+                cmd.CommandText = "SELECT E.*, C.Artist, C.Venue FROM Events E LEFT JOIN Concerts C ON E.Id = C.EventId WHERE E.Name LIKE @name + '%'";
+                cmd.Parameters.AddWithValue("@name", filter);
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                {
+                    da.Fill(dataTable);
+                }
+            }
+            return dataTable;
+        }
     }
 }

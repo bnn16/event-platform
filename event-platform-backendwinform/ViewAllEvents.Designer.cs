@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            textBox1 = new TextBox();
+            Filter = new TextBox();
             label1 = new Label();
             dataGridView1 = new DataGridView();
             panel1 = new Panel();
@@ -56,12 +56,13 @@
             panel1.SuspendLayout();
             SuspendLayout();
             // 
-            // textBox1
+            // Filter
             // 
-            textBox1.Location = new Point(341, 22);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(100, 23);
-            textBox1.TabIndex = 7;
+            Filter.Location = new Point(341, 22);
+            Filter.Name = "Filter";
+            Filter.Size = new Size(100, 23);
+            Filter.TabIndex = 7;
+            Filter.TextChanged += textBox1_TextChanged;
             // 
             // label1
             // 
@@ -300,7 +301,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             ClientSize = new Size(814, 520);
-            Controls.Add(textBox1);
+            Controls.Add(Filter);
             Controls.Add(label1);
             Controls.Add(dataGridView1);
             Controls.Add(panel1);
@@ -316,7 +317,7 @@
 
         #endregion
 
-        private TextBox textBox1;
+        private TextBox Filter;
         private Label label1;
         private DataGridView dataGridView1;
         private Panel panel1;
