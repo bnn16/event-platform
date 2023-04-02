@@ -7,19 +7,21 @@ namespace event_platform_backendwinform
 {
     public partial class MainForm : Form
     {
-        public MainForm()
+        private readonly DBController _dbController;
+        public MainForm(DBController dbController)
         {
             InitializeComponent();
+            _dbController = dbController;
         }
         private void addEventToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddEventForm newForm = new AddEventForm();
+            AddEventForm newForm = new AddEventForm(_dbController);
             newForm.Show();
         }
 
         private void viewAllEventsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ViewAllEvents newForm = new ViewAllEvents();
+            ViewAllEvents newForm = new ViewAllEvents(_dbController);
             newForm.Show();
         }
     }

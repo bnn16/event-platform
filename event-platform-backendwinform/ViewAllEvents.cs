@@ -7,19 +7,20 @@ namespace event_platform_backendwinform
 {
     public partial class ViewAllEvents : Form
     {
+        private readonly DBController _dbController;
         private TextBox[] textBoxes;
-        public ViewAllEvents()
+        public ViewAllEvents(DBController dbController)
         {
             InitializeComponent();
             textBoxes = new TextBox[] { txtBoxArtist, txtBoxCapacity, txtBoxDescription, txtBoxEventType, txtBoxID, txtBoxName, txtBoxPrice, txtBoxVenue };
             txtBoxVenue.Enabled = false;
             txtBoxArtist.Enabled = false;
+            dbController = _dbController;
         }
-        private DBController dbController = new DBController();
 
         private void ViewAllEvents_Load(object sender, EventArgs e)
         {
-            var datatable = dbController.GetAllEvents();
+            var datatable = _dbController.GetAllEvents();
 
             dataGridView1.DataSource = datatable;
         }
@@ -64,7 +65,7 @@ namespace event_platform_backendwinform
                 //populate the datagrid view.
                 int id = int.Parse(dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString());
 
-                var dataSet = dbController.GetEventById(id);
+                var dataSet = _dbController.GetEventById(id);
                 if (dataSet.Tables[0].Rows.Count > 0)
                 {
                     CultureInfo provider = new CultureInfo("en-US");
@@ -100,12 +101,12 @@ namespace event_platform_backendwinform
         {
             if (Filter.Text != "")
             {
-                var filter = dbController.GetEventByFilter(Filter.Text);
+                var filter = _dbController.GetEventByFilter(Filter.Text);
                 dataGridView1.DataSource = filter;
             }
             else
             {
-                var datatable = dbController.GetAllEvents();
+                var datatable = _dbController.GetAllEvents();
                 dataGridView1.DataSource = datatable;
             }
         }
@@ -122,7 +123,7 @@ namespace event_platform_backendwinform
                     var updatedConcert = _eventManager.CreateConcertEvent(Int32.Parse(txtBoxID.Text), txtBoxName.Text, txtBoxDescription.Text, dateTimePicker1.Value, Price, txtBoxEventType.Text, Int32.Parse(txtBoxCapacity.Text), txtBoxArtist.Text, txtBoxVenue.Text); ;
 
                     //clear the txtBoxes
-                    var updatedBoolConcert = await dbController.UpdateEventAsync(updatedConcert, selectedEventId, updatedConcert.Artist, updatedConcert.Venue);
+                    var updatedBoolConcert = await _dbController.UpdateEventAsync(updatedConcert, selectedEventId, updatedConcert.Artist, updatedConcert.Venue);
                     if (updatedBoolConcert)
                     {
                         MessageBox.Show("Success!", "Gratz you edited the Concert!");
@@ -131,7 +132,7 @@ namespace event_platform_backendwinform
                             textBox.Clear();
                         }
                         //update the datagridview 
-                        var datatable = dbController.GetAllEvents();
+                        var datatable = _dbController.GetAllEvents();
                         dataGridView1.DataSource = datatable;
 
 
@@ -150,7 +151,7 @@ namespace event_platform_backendwinform
 
                     var updatedEvent = _eventManager.CreateEvent(Int32.Parse(txtBoxID.Text), txtBoxName.Text, txtBoxDescription.Text, dateTimePicker1.Value, Convert.ToInt32(txtBoxPrice.Text), txtBoxEventType.Text, Int32.Parse(txtBoxCapacity.Text));
 
-                    var updateBoolEvent = await dbController.UpdateEventAsync(updatedEvent, selectedEventId);
+                    var updateBoolEvent = await _dbController.UpdateEventAsync(updatedEvent, selectedEventId);
 
                     if (updateBoolEvent)
                     {
@@ -160,7 +161,7 @@ namespace event_platform_backendwinform
                             textBox.Clear();
                         }
                         //update the datagridview 
-                        var datatable = dbController.GetAllEvents();
+                        var datatable = _dbController.GetAllEvents();
                         dataGridView1.DataSource = datatable;
 
 
@@ -184,14 +185,14 @@ namespace event_platform_backendwinform
             {
                 try
                 {
-                    var deleteBoolEvent = await dbController.DeleteEvent(selectedEventId);
+                    var deleteBoolEvent = await _dbController.DeleteEvent(selectedEventId);
                     MessageBox.Show("Event Succesfully Deleted","Success");
 
                     foreach (TextBox textBox in textBoxes)
                     {
                         textBox.Clear();
                     }
-                    var datatable = dbController.GetAllEvents();
+                    var datatable = _dbController.GetAllEvents();
                     dataGridView1.DataSource = datatable;
                 }
 

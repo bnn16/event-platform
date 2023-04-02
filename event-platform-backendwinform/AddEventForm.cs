@@ -15,13 +15,13 @@ namespace event_platform_backendwinform
     public partial class AddEventForm : Form
     {
         private TextBox[] textBoxes;
-        public AddEventForm()
+        private readonly DBController _dbController;
+        public AddEventForm(DBController dbController)
         {
             InitializeComponent();
             textBoxes = new TextBox[] { txtBoxArtist, txtBoxConcertID, Capacity, txtBoxConcertName, txtBoxID, txtBoxName, txtBoxName, txtBoxVenue };
+            _dbController = dbController;
         }
-
-        public DBController dBController = new DBController();
 
         private async void button1_ClickAsync(object sender, EventArgs e)
         {
@@ -31,7 +31,7 @@ namespace event_platform_backendwinform
 
             try
             {
-                bool a = await dBController.AddEventAsync(concertEvent);
+                bool a = await _dbController.AddEventAsync(concertEvent);
                 if (a == true)
                 {
                     foreach (TextBox textBox in textBoxes)
@@ -56,7 +56,7 @@ namespace event_platform_backendwinform
 
             try
             {
-                bool a = await dBController.AddConcertAsync(concertEvent);
+                bool a = await _dbController.AddConcertAsync(concertEvent);
                 if (a == true)
                 {
                     foreach (TextBox textBox in textBoxes)
