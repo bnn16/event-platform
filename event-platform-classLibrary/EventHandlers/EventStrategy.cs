@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Data;
 using System.Threading.Tasks;
 using event_platform_classLibrary.EventHandlers.Classes;
 
@@ -9,15 +6,46 @@ namespace event_platform_classLibrary.EventHandlers
 {
     public class EventStrategy : IEventStrategy
     {
+        private readonly DBController _dbController;
+
+        public EventStrategy(DBController dbController)
+        {
+            _dbController = dbController;
+        }
+
         public Event CreateEvent(int id, string name, string description, DateTime date, int price, string eventType, int capacity)
         {
             return new Event(id, name, description, date, price, eventType, capacity);
         }
 
-        // Throw NotImplementedException for CreateConcertEvent method since this strategy only creates events
-        public ConcertEvent CreateConcertEvent(int id, string name, string description, DateTime date, int price, string eventType, int capacity, string artist, string venue)
+        public async Task<bool> UpdateEventAsync(Event @event, int id)
         {
-            throw new NotImplementedException("CreateConcertEvent method is not implemented");
+            return await _dbController.UpdateEventAsync(@event, id);
+        }
+
+        public async Task<bool> DeleteEvent(int id)
+        {
+            return await _dbController.DeleteEvent(id);
+        }
+
+        public DataTable GetAllElements()
+        {
+            return _dbController.GetAllEvents();
+        }
+
+        public DataSet GetEventById(int id) 
+        {
+            return _dbController.GetEventById(id);
+        }
+
+        public DataTable GetEventByFilter(string filter) 
+        { 
+            return _dbController.GetEventByFilter(filter);
+        }
+
+        public async Task<bool> AddEventAsync(Event eventObj) 
+        {
+            return await _dbController.AddEventAsync(eventObj);
         }
     }
 }

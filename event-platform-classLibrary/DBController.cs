@@ -1,5 +1,6 @@
 ﻿using event_platform_classLibrary.EventHandlers.Classes;
 using Microsoft.Data.SqlClient;
+using System;
 using System.Data;
 
 
@@ -13,10 +14,10 @@ namespace event_platform_classLibrary
             //todo add connection string with .env
             //Env.Load();
             //_connectionString = Environment.GetEnvironmentVariable("SQLSERVER_CONNECTIONSTRING");
-            _connectionString = "Server=BNNXD\\SQLEXPRESS;Database=smilevents;Trusted_Connection=True;TrustServerCertificate=True;";
+            _connectionString = "Server=MSI\\SQLEXPRESS;Database=smilevents;Trusted_Connection=True;TrustServerCertificate=True;";
 
         }
-    
+
 
         public async Task<bool> AddEventAsync(Event _event)
         {
@@ -159,6 +160,11 @@ namespace event_platform_classLibrary
         {
             DataTable dataTable = new DataTable();
 
+            if (_connectionString == null)
+            {
+                throw new ArgumentNullException(nameof(_connectionString));
+            }
+
             using (SqlConnection con = new SqlConnection(_connectionString))
             using (SqlCommand cmd = new SqlCommand())
             {
@@ -179,6 +185,61 @@ namespace event_platform_classLibrary
 
             return dataTable;
         }
+        public (List<Event>, List<ConcertEvent>) GetListOfEvents()
+        {
+            List<Event> eventList = new List<Event>();
+            List<ConcertEvent> concertList = new List<ConcertEvent>();
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                string query = @"
+                    SELECT E.Id, E.Name, E.Description, E.Date, E.Price, E.EventType, E.Capacity, C.Artist, C.Venue
+                    FROM Events E
+                    LEFT JOIN Concerts C ON E.Id = C.EventId
+                    ORDER BY E.Date, C.EventId
+                ";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int id = reader.GetInt32(0);
+                            string name = reader.GetString(1);
+                            string desc = reader.GetString(2);
+                            DateTime date = reader.GetDateTime(3);
+                            int price = reader.GetInt32(4);
+                            string eventType = reader.GetString(5);
+                            int capacity = reader.GetInt32(6);
+
+                            if (!reader.IsDBNull(7))
+                            {
+                                // This is a concert
+                                string artist = reader.GetString(7);
+                                string venue = reader.GetString(8);
+
+                                ConcertEvent concertObj = new ConcertEvent(id, name, desc, date, price, eventType, capacity, artist, venue);
+
+                                concertList.Add(concertObj);
+                            }
+                            else
+                            {
+                                // This is an event
+                                Event eventObj = new Event(id, name, desc, date, price, eventType, capacity);
+
+                                eventList.Add(eventObj);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return (eventList, concertList);
+        }
+
 
         //joins the tables via Id/EventId
         public DataSet GetEventById(int id)

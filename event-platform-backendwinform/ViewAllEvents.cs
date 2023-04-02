@@ -1,6 +1,8 @@
 ﻿using event_platform_classLibrary;
 using event_platform_classLibrary.EventHandlers;
+using Sprache;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using TextBox = System.Windows.Forms.TextBox;
 
 namespace event_platform_backendwinform
@@ -11,16 +13,18 @@ namespace event_platform_backendwinform
         private TextBox[] textBoxes;
         public ViewAllEvents(DBController dbController)
         {
+            _dbController = dbController;
             InitializeComponent();
             textBoxes = new TextBox[] { txtBoxArtist, txtBoxCapacity, txtBoxDescription, txtBoxEventType, txtBoxID, txtBoxName, txtBoxPrice, txtBoxVenue };
             txtBoxVenue.Enabled = false;
             txtBoxArtist.Enabled = false;
-            dbController = _dbController;
         }
 
         private void ViewAllEvents_Load(object sender, EventArgs e)
         {
-            var datatable = _dbController.GetAllEvents();
+
+            var _eventManager = new EventManager(new ConcertEventStrategy(_dbController));
+            var datatable = _eventManager.GetAllEvents();
 
             dataGridView1.DataSource = datatable;
         }
@@ -64,8 +68,8 @@ namespace event_platform_backendwinform
             {
                 //populate the datagrid view.
                 int id = int.Parse(dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString());
-
-                var dataSet = _dbController.GetEventById(id);
+                var _eventManager = new EventManager(new ConcertEventStrategy(_dbController));
+                var dataSet = _eventManager.GetEventById(id);
                 if (dataSet.Tables[0].Rows.Count > 0)
                 {
                     CultureInfo provider = new CultureInfo("en-US");
@@ -83,6 +87,9 @@ namespace event_platform_backendwinform
                     {
                         dateTimePicker1.Text = DateTime.ParseExact(dataSet.Tables[0].Rows[0][3].ToString(), "dd/MM/yyyy", provider).ToString();
                     }
+                    //todo : add regex to remove error from editing...
+                    /* string price = Regex.Replace(dataSet.Tables[0].Rows[0][4].ToString(), @"\.00$", "");
+                     txtBoxPrice.Text = price;*/
                     txtBoxPrice.Text = dataSet.Tables[0].Rows[0][4].ToString();
                     txtBoxEventType.Text = dataSet.Tables[0].Rows[0][5].ToString();
                     txtBoxCapacity.Text = dataSet.Tables[0].Rows[0][6].ToString();
@@ -99,14 +106,16 @@ namespace event_platform_backendwinform
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
+            var _eventManager = new EventManager(new ConcertEventStrategy(_dbController));
+
             if (Filter.Text != "")
             {
-                var filter = _dbController.GetEventByFilter(Filter.Text);
+                var filter = _eventManager.GetEventByFilter(Filter.Text);
                 dataGridView1.DataSource = filter;
             }
             else
             {
-                var datatable = _dbController.GetAllEvents();
+                var datatable = _eventManager.GetAllEvents();
                 dataGridView1.DataSource = datatable;
             }
         }
@@ -119,11 +128,13 @@ namespace event_platform_backendwinform
                 {
                     //todo bug -> decimal to int wrong format??? need to fix asap
                     var Price = Convert.ToInt32(txtBoxPrice.Text);
-                    var _eventManager = new EventManager(new ConcertEventStrategy());
+
+                    var _eventManager = new EventManager(new ConcertEventStrategy(_dbController));
                     var updatedConcert = _eventManager.CreateConcertEvent(Int32.Parse(txtBoxID.Text), txtBoxName.Text, txtBoxDescription.Text, dateTimePicker1.Value, Price, txtBoxEventType.Text, Int32.Parse(txtBoxCapacity.Text), txtBoxArtist.Text, txtBoxVenue.Text); ;
 
                     //clear the txtBoxes
-                    var updatedBoolConcert = await _dbController.UpdateEventAsync(updatedConcert, selectedEventId, updatedConcert.Artist, updatedConcert.Venue);
+                    //make use of the logic layer (event manager)
+                    var updatedBoolConcert = await  _eventManager.UpdateConcertEventAsync(updatedConcert, selectedEventId);
                     if (updatedBoolConcert)
                     {
                         MessageBox.Show("Success!", "Gratz you edited the Concert!");
@@ -132,7 +143,7 @@ namespace event_platform_backendwinform
                             textBox.Clear();
                         }
                         //update the datagridview 
-                        var datatable = _dbController.GetAllEvents();
+                        var datatable = _eventManager.GetAllEvents();
                         dataGridView1.DataSource = datatable;
 
 
@@ -147,11 +158,11 @@ namespace event_platform_backendwinform
             {
                 try
                 {
-                    var _eventManager = new EventManager(new EventStrategy());
+                    var _eventManager = new EventManager(new EventStrategy(_dbController));
 
                     var updatedEvent = _eventManager.CreateEvent(Int32.Parse(txtBoxID.Text), txtBoxName.Text, txtBoxDescription.Text, dateTimePicker1.Value, Convert.ToInt32(txtBoxPrice.Text), txtBoxEventType.Text, Int32.Parse(txtBoxCapacity.Text));
 
-                    var updateBoolEvent = await _dbController.UpdateEventAsync(updatedEvent, selectedEventId);
+                    var updateBoolEvent = await _eventManager.UpdateEventAsync(updatedEvent, selectedEventId);
 
                     if (updateBoolEvent)
                     {
@@ -161,7 +172,7 @@ namespace event_platform_backendwinform
                             textBox.Clear();
                         }
                         //update the datagridview 
-                        var datatable = _dbController.GetAllEvents();
+                        var datatable = _eventManager.GetAllEvents();
                         dataGridView1.DataSource = datatable;
 
 
@@ -185,14 +196,16 @@ namespace event_platform_backendwinform
             {
                 try
                 {
-                    var deleteBoolEvent = await _dbController.DeleteEvent(selectedEventId);
+                    var _eventManager = new EventManager(new EventStrategy(_dbController));
+                    var deleteBoolEvent = _eventManager.DeleteEvent(selectedEventId);
+
                     MessageBox.Show("Event Succesfully Deleted","Success");
 
                     foreach (TextBox textBox in textBoxes)
                     {
                         textBox.Clear();
                     }
-                    var datatable = _dbController.GetAllEvents();
+                    var datatable = _eventManager.GetAllEvents();
                     dataGridView1.DataSource = datatable;
                 }
 

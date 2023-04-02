@@ -25,13 +25,13 @@ namespace event_platform_backendwinform
 
         private async void button1_ClickAsync(object sender, EventArgs e)
         {
-            var _eventManager = new EventManager(new EventStrategy());
+            var _eventManager = new EventManager(new EventStrategy(_dbController));
 
-            var concertEvent = _eventManager.CreateEvent(Convert.ToInt32(txtBoxID.Text), txtBoxName.Text, rbTxtBoxDescription.Text, dateTimePicker1.Value, Convert.ToInt32(numPrice.Text), "Event", Convert.ToInt32(Capacity.Text));
+            var eventObj = _eventManager.CreateEvent(Convert.ToInt32(txtBoxID.Text), txtBoxName.Text, rbTxtBoxDescription.Text, dateTimePicker1.Value, Convert.ToInt32(numPrice.Text), "Event", Convert.ToInt32(Capacity.Text));
 
             try
             {
-                bool a = await _dbController.AddEventAsync(concertEvent);
+                bool a = await _eventManager.AddEventAsync(eventObj);
                 if (a == true)
                 {
                     foreach (TextBox textBox in textBoxes)
@@ -51,12 +51,12 @@ namespace event_platform_backendwinform
 
         private async void button2_Click(object sender, EventArgs e)
         {
-            var _eventManager = new EventManager(new ConcertEventStrategy());
+            var _eventManager = new EventManager(new ConcertEventStrategy(_dbController));
             var concertEvent = _eventManager.CreateConcertEvent(Convert.ToInt32(txtBoxConcertID.Text), txtBoxConcertName.Text, rtxtBoxConcertDescription.Text, dateTimePicker2.Value, Convert.ToInt32(numPriceConcert.Text), "Concert", Convert.ToInt32(CapacityConcert.Text), txtBoxArtist.Text, txtBoxVenue.Text);
 
             try
             {
-                bool a = await _dbController.AddConcertAsync(concertEvent);
+                bool a = await _eventManager.AddConcertAsync(concertEvent);
                 if (a == true)
                 {
                     foreach (TextBox textBox in textBoxes)
