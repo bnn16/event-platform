@@ -7,11 +7,11 @@ namespace event_platform.Pages
     public class ProfileModel : PageModel
     {
         public UserBindModel User { get; set; }
-        private DBController dbController { get; set; }
+        private readonly DBController _dbController;
 
         public ProfileModel(DBController dbController)
         {
-            this.dbController = dbController;
+            _dbController = dbController;
         }
 
         public string Username { get; set; }
@@ -24,12 +24,12 @@ namespace event_platform.Pages
             //todo: make it cleaner
             int userId = int.Parse(Request.Cookies["UserId"]);
             string authToken = Request.Cookies["AuthToken"];
-            if (!dbController.IsAuthTokenValid(userId, authToken))
+            if (!_dbController.IsAuthTokenValid(userId, authToken))
             {
                 return RedirectToPage("/Account/Login");
             }
 
-            User user = dbController.GetUserById(userId);
+            User user = _dbController.GetUserById(userId);
             Username = user.Username;
             User = new UserBindModel
             {

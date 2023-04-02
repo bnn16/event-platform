@@ -5,7 +5,7 @@ namespace event_platform.Pages.Account
 {
     public class LogoutModel : PageModel
     {
-        private DBController _dbController;
+        private readonly DBController _dbController;
 
         public LogoutModel(DBController dbController)
         {
