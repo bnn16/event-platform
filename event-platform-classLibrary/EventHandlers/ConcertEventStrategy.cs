@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace event_platform_classLibrary.EventHandlers
 {
-    public class ConcertEventStrategy : IEventStrategy
+    //fix inherit the IConcertEventStrategy Interface, so it follows liskovs principle
+    public class ConcertEventStrategy : IConcertEventStrategy
     {
         public ConcertEvent CreateConcertEvent(int id, string name, string description, DateTime date, int price, string eventType, int capacity, string artist, string venue)
         {

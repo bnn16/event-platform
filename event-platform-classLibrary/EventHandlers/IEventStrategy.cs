@@ -11,6 +11,5 @@ namespace event_platform_classLibrary.EventHandlers
     {
         Event CreateEvent(int id, string name, string description , DateTime date, int price, string eventType, int capacity);
 
-        ConcertEvent CreateConcertEvent(int id, string name, string description, DateTime date, int price, string eventType, int capacity, string artist, string venue);
     }
 }
