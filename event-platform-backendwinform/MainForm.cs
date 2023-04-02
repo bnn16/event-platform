@@ -1,7 +1,4 @@
 using event_platform_classLibrary;
-using event_platform_classLibrary.EventHandlers;
-using System.Diagnostics;
-using System.Xml.Linq;
 
 namespace event_platform_backendwinform
 {

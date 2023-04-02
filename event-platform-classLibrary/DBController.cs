@@ -1,6 +1,5 @@
 ﻿using event_platform_classLibrary.EventHandlers.Classes;
 using Microsoft.Data.SqlClient;
-using System;
 using System.Data;
 
 
@@ -261,12 +260,12 @@ namespace event_platform_classLibrary
             return dataSet;
         }
 
-        public DataTable GetEventByFilter(string filter) 
+        public DataTable GetEventByFilter(string filter)
         {
             DataTable dataTable = new DataTable();
             using (SqlConnection con = new SqlConnection(_connectionString))
-            using (SqlCommand cmd = new SqlCommand()) 
-            { 
+            using (SqlCommand cmd = new SqlCommand())
+            {
                 cmd.Connection = con;
                 cmd.CommandText = "SELECT E.*, C.Artist, C.Venue FROM Events E LEFT JOIN Concerts C ON E.Id = C.EventId WHERE E.Name LIKE @name + '%'";
                 cmd.Parameters.AddWithValue("@name", filter);

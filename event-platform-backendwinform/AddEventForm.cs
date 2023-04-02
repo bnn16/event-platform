@@ -1,14 +1,5 @@
-﻿using event_platform_classLibrary.EventHandlers;
-using event_platform_classLibrary;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using event_platform_classLibrary;
+using event_platform_classLibrary.EventHandlers;
 
 namespace event_platform_backendwinform
 {

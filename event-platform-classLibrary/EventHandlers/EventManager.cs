@@ -66,7 +66,7 @@ DeleteEvent(int eventId)
             return _eventStrategy.GetEventById(id);
         }
 
-        public DataTable GetEventByFilter(string filter) 
+        public DataTable GetEventByFilter(string filter)
         {
             return _eventStrategy.GetEventByFilter(filter);
         }

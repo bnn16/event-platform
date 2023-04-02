@@ -1,6 +1,4 @@
 ﻿using System.Data;
-using System.Threading.Tasks;
-using event_platform_classLibrary.EventHandlers.Classes;
 
 namespace event_platform_classLibrary.EventHandlers
 {
@@ -33,17 +31,17 @@ namespace event_platform_classLibrary.EventHandlers
             return _dbController.GetAllEvents();
         }
 
-        public DataSet GetEventById(int id) 
+        public DataSet GetEventById(int id)
         {
             return _dbController.GetEventById(id);
         }
 
-        public DataTable GetEventByFilter(string filter) 
-        { 
+        public DataTable GetEventByFilter(string filter)
+        {
             return _dbController.GetEventByFilter(filter);
         }
 
-        public async Task<bool> AddEventAsync(Event eventObj) 
+        public async Task<bool> AddEventAsync(Event eventObj)
         {
             return await _dbController.AddEventAsync(eventObj);
         }

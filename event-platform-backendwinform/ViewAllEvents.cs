@@ -1,6 +1,5 @@
 ﻿using event_platform_classLibrary;
 using event_platform_classLibrary.EventHandlers;
-using Sprache;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using TextBox = System.Windows.Forms.TextBox;
@@ -127,14 +126,14 @@ namespace event_platform_backendwinform
                 try
                 {
                     //todo bug -> decimal to int wrong format??? need to fix asap
-                    var Price = Convert.ToInt32(txtBoxPrice.Text);
+                    var Price = Convert.ToInt32(Regex.Replace(txtBoxPrice.Text, @"\..*$", ""));
 
                     var _eventManager = new EventManager(new ConcertEventStrategy(_dbController));
                     var updatedConcert = _eventManager.CreateConcertEvent(Int32.Parse(txtBoxID.Text), txtBoxName.Text, txtBoxDescription.Text, dateTimePicker1.Value, Price, txtBoxEventType.Text, Int32.Parse(txtBoxCapacity.Text), txtBoxArtist.Text, txtBoxVenue.Text); ;
 
                     //clear the txtBoxes
                     //make use of the logic layer (event manager)
-                    var updatedBoolConcert = await  _eventManager.UpdateConcertEventAsync(updatedConcert, selectedEventId);
+                    var updatedBoolConcert = await _eventManager.UpdateConcertEventAsync(updatedConcert, selectedEventId);
                     if (updatedBoolConcert)
                     {
                         MessageBox.Show("Success!", "Gratz you edited the Concert!");
@@ -158,9 +157,10 @@ namespace event_platform_backendwinform
             {
                 try
                 {
+                    var Price = Convert.ToInt32(Regex.Replace(txtBoxPrice.Text, @"\..*$", ""));
                     var _eventManager = new EventManager(new EventStrategy(_dbController));
 
-                    var updatedEvent = _eventManager.CreateEvent(Int32.Parse(txtBoxID.Text), txtBoxName.Text, txtBoxDescription.Text, dateTimePicker1.Value, Convert.ToInt32(txtBoxPrice.Text), txtBoxEventType.Text, Int32.Parse(txtBoxCapacity.Text));
+                    var updatedEvent = _eventManager.CreateEvent(Int32.Parse(txtBoxID.Text), txtBoxName.Text, txtBoxDescription.Text, dateTimePicker1.Value, Price, txtBoxEventType.Text, Int32.Parse(txtBoxCapacity.Text));
 
                     var updateBoolEvent = await _eventManager.UpdateEventAsync(updatedEvent, selectedEventId);
 
@@ -174,18 +174,12 @@ namespace event_platform_backendwinform
                         //update the datagridview 
                         var datatable = _eventManager.GetAllEvents();
                         dataGridView1.DataSource = datatable;
-
-
                     }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
-            }
-            else
-            {
-                MessageBox.Show("Error!", "Please stick to the event types : Event and Concert !");
             }
         }
 
@@ -199,7 +193,7 @@ namespace event_platform_backendwinform
                     var _eventManager = new EventManager(new EventStrategy(_dbController));
                     var deleteBoolEvent = _eventManager.DeleteEvent(selectedEventId);
 
-                    MessageBox.Show("Event Succesfully Deleted","Success");
+                    MessageBox.Show("Event Succesfully Deleted", "Success");
 
                     foreach (TextBox textBox in textBoxes)
                     {
@@ -214,7 +208,7 @@ namespace event_platform_backendwinform
                     MessageBox.Show(ex.Message);
                 }
             }
-           
+
         }
     }
 }

@@ -1,6 +1,5 @@
-﻿using System.Data;
-using System.Threading.Tasks;
-using event_platform_classLibrary.EventHandlers.Classes;
+﻿using event_platform_classLibrary.EventHandlers.Classes;
+using System.Data;
 
 namespace event_platform_classLibrary.EventHandlers
 {
