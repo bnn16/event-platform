@@ -210,6 +210,64 @@ namespace event_platform_classLibrary
                             string name = reader.GetString(1);
                             string desc = reader.GetString(2);
                             DateTime date = reader.GetDateTime(3);
+                            int price = Convert.ToInt32(reader.GetDecimal(4));
+                            string eventType = reader.GetString(5);
+                            int capacity = reader.GetInt32(6);
+
+                            if (!reader.IsDBNull(7))
+                            {
+                                // This is a concert
+                                string artist = reader.GetString(7);
+                                string venue = reader.GetString(8);
+
+                                ConcertEvent concertObj = new ConcertEvent(id, name, desc, date, price, eventType, capacity, artist, venue);
+
+                                concertList.Add(concertObj);
+                            }
+                            else
+                            {
+                                // This is an event
+                                Event eventObj = new Event(id, name, desc, date, price, eventType, capacity);
+
+                                eventList.Add(eventObj);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return (eventList, concertList);
+        }
+
+        public (List<Event>, List<ConcertEvent>) GetMyEvents(int userId)
+        {
+            List<Event> eventList = new List<Event>();
+            List<ConcertEvent> concertList = new List<ConcertEvent>();
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                string query = @"
+            SELECT E.Id, E.Name, E.Description, E.Date, E.Price, E.EventType, E.Capacity, C.Artist, C.Venue
+            FROM Events E
+            LEFT JOIN Concerts C ON E.Id = C.EventId
+            INNER JOIN Bookings B ON E.Id = B.EventId AND B.UserId = @userId
+            ORDER BY E.Date, C.EventId
+        ";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@userId", userId);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int id = reader.GetInt32(0);
+                            string name = reader.GetString(1);
+                            string desc = reader.GetString(2);
+                            DateTime date = reader.GetDateTime(3);
                             int price = reader.GetInt32(4);
                             string eventType = reader.GetString(5);
                             int capacity = reader.GetInt32(6);
@@ -240,6 +298,7 @@ namespace event_platform_classLibrary
         }
 
 
+
         //joins the tables via Id/EventId
         public DataSet GetEventById(int id)
         {
@@ -260,7 +319,40 @@ namespace event_platform_classLibrary
             return dataSet;
         }
 
-        public DataTable GetEventByFilter(string filter)
+        public Event GetEventByIdObj(int eventId)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                string sql = "SELECT * FROM Events WHERE Id = @Id";
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@Id", eventId);
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        Event eventObj = new Event(
+                            reader.GetInt32(0),
+                            reader.GetString(1),
+                            reader.GetString(2),
+                            reader.GetDateTime(3),
+                            (int)reader.GetDecimal(4),
+                            reader.GetString(5),
+                            reader.GetInt32(6)
+                        );
+                        return eventObj;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+        }
+
+
+
+    public DataTable GetEventByFilter(string filter)
         {
             DataTable dataTable = new DataTable();
             using (SqlConnection con = new SqlConnection(_connectionString))
@@ -432,6 +524,67 @@ namespace event_platform_classLibrary
             }
 
             return user;
+        }
+        public bool AddBooking(int eventId, int userId)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand("INSERT INTO Bookings (UserId, EventId) VALUES (@UserId, @EventId)", connection))
+                {
+                    command.Parameters.AddWithValue("@UserId", userId);
+                    command.Parameters.AddWithValue("@EventId", eventId);
+
+                    int rowsAffected = command.ExecuteNonQuery();
+
+                    return rowsAffected > 0;
+                }
+            }
+        }
+
+        public void UpdateEvent(Event updatedEvent)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "UPDATE Events SET Name = @Name, Description = @Description, " +
+                               "Date = @Date, Price = @Price, EventType = @EventType, Capacity = @Capacity " +
+                               "WHERE Id = @Id";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Id", updatedEvent.Id);
+                    command.Parameters.AddWithValue("@Name", updatedEvent.Name);
+                    command.Parameters.AddWithValue("@Description", updatedEvent.Description);
+                    command.Parameters.AddWithValue("@Date", updatedEvent.Date);
+                    command.Parameters.AddWithValue("@Price", updatedEvent.Price);
+                    command.Parameters.AddWithValue("@EventType", updatedEvent.EventType);
+                    command.Parameters.AddWithValue("@Capacity", updatedEvent.Capacity);
+
+                    connection.Open();
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        
+        public bool HasBookedEvent(int eventId, int userId)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM Bookings WHERE UserId = @UserId AND EventId = @EventId", connection))
+                {
+                    command.Parameters.AddWithValue("@UserId", userId);
+                    command.Parameters.AddWithValue("@EventId", eventId);
+
+                    int count = (int)command.ExecuteScalar();
+
+                    return count > 0;
+                }
+            }
         }
 
     }

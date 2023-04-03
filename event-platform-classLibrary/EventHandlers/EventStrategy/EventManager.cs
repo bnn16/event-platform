@@ -1,7 +1,7 @@
 ﻿using event_platform_classLibrary.EventHandlers.Classes;
 using System.Data;
 
-namespace event_platform_classLibrary.EventHandlers
+namespace event_platform_classLibrary.EventHandlers.EventStrategy.EventStrategy
 {
     public class EventManager
     {

@@ -1,4 +1,5 @@
 using event_platform_classLibrary;
+using event_platform_classLibrary.EventHandlers.Classes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 

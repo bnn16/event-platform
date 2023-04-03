@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace event_platform_classLibrary.EventHandlers
+namespace event_platform_classLibrary.EventHandlers.EventStrategy
 {
     public interface IEventStrategy
     {

@@ -1,5 +1,6 @@
 ﻿using event_platform_classLibrary;
 using event_platform_classLibrary.EventHandlers;
+using event_platform_classLibrary.EventHandlers.EventStrategy.EventStrategy;
 
 namespace event_platform_backendwinform
 {

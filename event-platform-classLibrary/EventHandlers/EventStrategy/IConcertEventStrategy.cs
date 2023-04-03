@@ -1,6 +1,6 @@
 ﻿using event_platform_classLibrary.EventHandlers.Classes;
 
-namespace event_platform_classLibrary.EventHandlers
+namespace event_platform_classLibrary.EventHandlers.EventStrategy
 {
     public interface IConcertEventStrategy : IEventStrategy
     {

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "event-platform", "event-pla
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "event-platform-backendwinform", "..\event-platform-backendwinform\event-platform-backendwinform.csproj", "{7A226B1D-4DCC-4FC4-9424-10D84316DB93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "event-platform-classLibrary", "..\event-platform-classLibrary\event-platform-classLibrary.csproj", "{6E99814E-BDA5-4338-B6D2-4451C47633DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "event-platform-classLibrary", "..\event-platform-classLibrary\event-platform-classLibrary.csproj", "{6E99814E-BDA5-4338-B6D2-4451C47633DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

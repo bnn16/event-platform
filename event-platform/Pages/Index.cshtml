@@ -1,8 +1,63 @@
 ﻿@page
+@using event_platform_classLibrary.EventHandlers.Classes;
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
 }
+
+<style>
+    body {
+        background-color: #18122B;
+        color: #fff;
+        font-family: Arial, sans-serif;
+    }
+
+    .event-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 20px;
+    }
+
+    .event-box {
+        width: 300px;
+        background-color: #393053;
+        border: 1px solid #443C68;
+        padding: 20px;
+        margin: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 5px;
+    }
+
+    .event-title {
+        margin-top: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #635985;
+    }
+
+    .event-description {
+        margin-top: 10px;
+        text-align: center;
+        color: #ccc;
+    }
+
+    .book-now-btn {
+        margin-top: 10px;
+        padding: 5px 10px;
+        background-color: #635985;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+        .book-now-btn:hover {
+            background-color: #443C68;
+        }
+
+</style>
 
 <div class="text-center">
     <h1 class="display-4">Welcome!</h1>
@@ -10,4 +65,46 @@
     {
         <p>Hello @Model.Username</p>
     }
+</div>
+
+<h2>Events</h2>
+
+<form method="get">
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" asp-for="ShowOnlyConcerts" id="showOnlyConcerts">
+        <label class="form-check-label" for="showOnlyConcerts">
+            Show only concerts
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label for="searchTitle">Search by title:</label>
+        <input type="text" class="form-control" asp-for="SearchTitle" id="searchTitle" />
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
+
+<div class="event-container">
+    @foreach (var eventItem in Model.Events)
+{
+    if (eventItem is ConcertEvent)
+    {
+        <div class="event-box concert-event-box">
+            <div class="event-title">@eventItem.Name</div>
+            <div class="event-description">@eventItem.Description</div>
+            <div class="event-details">@((eventItem as ConcertEvent).Artist) @((eventItem as ConcertEvent).Venue)</div>
+            <a href="/BookEvent/@eventItem.Id" class="book-now-btn">Book Now</a>
+        </div>
+    }
+    else
+    {
+        <div class="event-box">
+            <div class="event-title">@eventItem.Name</div>
+            <div class="event-description">@eventItem.Description</div>
+            <a href="/BookEvent/@eventItem.Id" class="book-now-btn">Book Now</a>
+        </div>
+    }
+}
+
 </div>

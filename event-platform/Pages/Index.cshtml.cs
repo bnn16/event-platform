@@ -1,6 +1,12 @@
 ﻿using event_platform_classLibrary;
+using event_platform_classLibrary.EventHandlers.Classes;
+using event_platform_classLibrary.EventHandlers.UserStrategy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace event_platform.Pages
 {
@@ -16,6 +22,11 @@ namespace event_platform.Pages
         }
 
         public string Username { get; set; }
+        public List<Event> Events { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public bool ShowOnlyConcerts { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string SearchTitle { get; set; }
 
         public IActionResult OnGet()
         {
@@ -38,6 +49,23 @@ namespace event_platform.Pages
             Username = user.Username;
             ViewData["Email"] = user.Email;
             ViewData["Description"] = user.Description;
+
+            var _userManager = new UserManager(new UserWebStrategy(_dbController));
+            (List<Event> events, List<ConcertEvent> concerts) = _dbController.GetListOfEvents(); _userManager.GetEvents();
+
+            Events = events.Where(e => !(e is ConcertEvent && !ShowOnlyConcerts)).ToList();
+
+            //add only the concerts to the list
+            if (ShowOnlyConcerts)
+            {
+                Events.AddRange(concerts);
+            }
+
+            //filter the events by title
+            if (!string.IsNullOrEmpty(SearchTitle))
+            {
+                Events = Events.Where(e => e.Name.Contains(SearchTitle, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
 
             return Page();
         }

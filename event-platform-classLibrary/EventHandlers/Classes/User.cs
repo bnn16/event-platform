@@ -1,4 +1,4 @@
-﻿namespace event_platform_classLibrary
+﻿namespace event_platform_classLibrary.EventHandlers.Classes
 {
     public class User
     {
@@ -8,5 +8,6 @@
         public string PasswordHash { get; set; }
         public string Description { get; set; }
         public string Role { get; set; }
+        public string AuthToken { get; internal set; }
     }
 }
