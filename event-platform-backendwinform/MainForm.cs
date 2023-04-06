@@ -4,11 +4,11 @@ namespace event_platform_backendwinform
 {
     public partial class MainForm : Form
     {
-        private readonly DBController _dbController;
-        public MainForm(DBController dbController)
+        private readonly IDBController _dbController;
+        public MainForm(IDBController dbController)
         {
             InitializeComponent();
-            _dbController = dbController;
+            _dbController = new DBController();
         }
         private void addEventToolStripMenuItem_Click(object sender, EventArgs e)
         {

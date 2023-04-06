@@ -8,14 +8,14 @@ namespace event_platform.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private readonly DBController _dbController;
+        private readonly IDBController _dbController;
 
         [BindProperty]
         public LoginBindModel Input { get; set; }
 
-        public LoginModel(DBController dbController)
+        public LoginModel()
         {
-            _dbController = dbController;
+            _dbController = new DBController();
         }
 
         public IActionResult OnGet()

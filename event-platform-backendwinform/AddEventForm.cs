@@ -7,8 +7,8 @@ namespace event_platform_backendwinform
     public partial class AddEventForm : Form
     {
         private TextBox[] textBoxes;
-        private readonly DBController _dbController;
-        public AddEventForm(DBController dbController)
+        private readonly IDBController _dbController;
+        public AddEventForm(IDBController dbController)
         {
             InitializeComponent();
             textBoxes = new TextBox[] { txtBoxArtist, txtBoxConcertID, Capacity, txtBoxConcertName, txtBoxID, txtBoxName, txtBoxName, txtBoxVenue };

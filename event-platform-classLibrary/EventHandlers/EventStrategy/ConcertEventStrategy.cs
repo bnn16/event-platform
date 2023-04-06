@@ -5,9 +5,9 @@ namespace event_platform_classLibrary.EventHandlers.EventStrategy.EventStrategy
 {
     public class ConcertEventStrategy : IConcertEventStrategy
     {
-        private readonly DBController _dbController;
+        private readonly IDBController _dbController;
 
-        public ConcertEventStrategy(DBController dbController)
+        public ConcertEventStrategy(IDBController dbController)
         {
             _dbController = dbController;
         }

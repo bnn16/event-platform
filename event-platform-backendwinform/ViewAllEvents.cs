@@ -9,9 +9,9 @@ namespace event_platform_backendwinform
 {
     public partial class ViewAllEvents : Form
     {
-        private readonly DBController _dbController;
+        private readonly IDBController _dbController;
         private TextBox[] textBoxes;
-        public ViewAllEvents(DBController dbController)
+        public ViewAllEvents(IDBController dbController)
         {
             _dbController = dbController;
             InitializeComponent();

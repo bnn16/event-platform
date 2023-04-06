@@ -13,7 +13,7 @@ namespace event_platform.Pages
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
-        private readonly DBController _dbController;
+        private readonly IDBController _dbController;
 
         public IndexModel(ILogger<IndexModel> logger)
         {

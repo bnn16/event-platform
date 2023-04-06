@@ -8,11 +8,11 @@ namespace event_platform.Pages
     public class ProfileModel : PageModel
     {
         public UserBindModel User { get; set; }
-        private readonly DBController _dbController;
+        private readonly IDBController _dbController;
 
-        public ProfileModel(DBController dbController)
+        public ProfileModel()
         {
-            _dbController = dbController;
+            _dbController = new DBController();
         }
 
         public string Username { get; set; }

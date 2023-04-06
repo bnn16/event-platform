@@ -5,11 +5,11 @@ namespace event_platform.Pages.Account
 {
     public class LogoutModel : PageModel
     {
-        private readonly DBController _dbController;
+        private readonly IDBController _dbController;
 
-        public LogoutModel(DBController dbController)
+        public LogoutModel()
         {
-            _dbController = dbController;
+            _dbController = new DBController();
         }
 
 

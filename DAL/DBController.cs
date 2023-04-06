@@ -1,11 +1,12 @@
-﻿using event_platform_classLibrary.EventHandlers.Classes;
+﻿using BCrypt.Net;
+using event_platform_classLibrary.EventHandlers.Classes;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
 
 namespace event_platform_classLibrary
 {
-    public class DBController
+    public class DBController : IDBController
     {
         private readonly string _connectionString;
         public DBController()

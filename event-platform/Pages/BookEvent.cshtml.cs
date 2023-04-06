@@ -9,11 +9,11 @@ namespace event_platform.Pages
 {
     public class BookEventModel : PageModel
     {
-        private readonly DBController _dbController;
+        private readonly IDBController _dbController;
 
-        public BookEventModel(DBController dbController)
+        public BookEventModel()
         {
-            _dbController = dbController;
+            _dbController = new DBController();
         }
 
         public Event Event { get; set; }

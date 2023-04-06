@@ -4,9 +4,9 @@ namespace event_platform_classLibrary.EventHandlers.UserStrategy
 {
     public class UserWebStrategy : IUserWebStrategy
     {
-        private readonly DBController _dbController;
+        private readonly IDBController _dbController;
 
-        public UserWebStrategy(DBController dbController)
+        public UserWebStrategy(IDBController dbController)
         {
             _dbController = dbController;
         }

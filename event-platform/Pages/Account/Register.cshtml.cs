@@ -6,14 +6,14 @@ namespace event_platform.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly DBController _dbcontroller;
+        private readonly IDBController _dbcontroller;
 
         [BindProperty]
         public RegisterBindModel Input { get; set; }
 
-        public RegisterModel(DBController dbController)
+        public RegisterModel()
         {
-            _dbcontroller = dbController;
+            _dbcontroller = new DBController();
         }
 
         public IActionResult OnGet()
