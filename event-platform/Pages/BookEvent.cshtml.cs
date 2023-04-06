@@ -11,9 +11,9 @@ namespace event_platform.Pages
     {
         private readonly IDBController _dbController;
 
-        public BookEventModel()
+        public BookEventModel(DBController dbController)
         {
-            _dbController = new DBController();
+            _dbController = dbController;
         }
 
         public Event Event { get; set; }
