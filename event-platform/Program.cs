@@ -15,6 +15,21 @@ builder.Configuration.AddJsonFile("appsettings.json");
 
 var app = builder.Build();
 
+// Middleware to redirect to /landing on first access
+bool isFirstAccess = true;
+app.Use(async (context, next) =>
+{
+    if (isFirstAccess)
+    {
+        isFirstAccess = false;
+        context.Response.Redirect("/landing");
+    }
+    else
+    {
+        await next.Invoke();
+    }
+});
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

@@ -53,7 +53,7 @@ namespace event_platform.Pages
             var _userManager = new UserManager(new UserWebStrategy(_dbController));
             (List<Event> events, List<ConcertEvent> concerts) = _dbController.GetListOfEvents(); _userManager.GetEvents();
 
-            Events = events.Where(e => !(e is ConcertEvent && !ShowOnlyConcerts)).ToList();
+            Events = events.Where(e => !(e is ConcertEvent && ShowOnlyConcerts)).ToList();
 
             //add only the concerts to the list
             if (ShowOnlyConcerts)

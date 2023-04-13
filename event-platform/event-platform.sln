@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "event-platform-backendwinfo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "event-platform-classLibrary", "..\event-platform-classLibrary\event-platform-classLibrary.csproj", "{6E99814E-BDA5-4338-B6D2-4451C47633DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "..\DAL\DAL.csproj", "{890402FF-F174-400C-9F98-03C6FC8FBD5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL", "..\DAL\DAL.csproj", "{890402FF-F174-400C-9F98-03C6FC8FBD5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Classes", "..\Classes\Classes.csproj", "{EC279C35-A821-44B4-80CE-46B29C4E4666}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Classes", "..\Classes\Classes.csproj", "{EC279C35-A821-44B4-80CE-46B29C4E4666}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

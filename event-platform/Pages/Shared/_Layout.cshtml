@@ -7,9 +7,25 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/event_platform.styles.css" asp-append-version="true" />
+      <style>
+        <style>
+    html, body, .wrapper, main {
+        height: 100%;
+    }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+        }
+</style>
+
 </head>
-<body>
-    <div class="wrapper"
+<body class="h-100">
+<div class="wrapper"
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
@@ -39,17 +55,19 @@
         </nav>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3" style="background= #FBE2B0">
-            @RenderBody()
-        </main>
-    </div>
 
-<footer style="background-color: #FBE2B0 !important" class="border-top footer text-muted mt-auto">
-    <div class="container">
-        &copy; 2023 - Smilevents - <a asp-area="" asp-page="/Privacy">Privacy</a>
-    </div>
-</footer>
+        <main role="main" class="pb-3" style="background= #FBE2B0">
+            <div class="container">
+            @RenderBody()
+            </div>
+        </main>
+
+
+  <footer style="background-color: #FBE2B0 !important" class="border-top footer text-muted mt-auto">
+            <div class="container">
+                &copy; 2023 - Smilevents - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            </div>
+   </footer>
 </div>
 
 
