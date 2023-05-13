@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using event_platform_classLibrary;
+using DAL;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddScoped<DBController>();
+builder.Services.AddScoped<IDBController,DBController>();
+builder.Services.AddScoped<IUserDBController, UserDBController>();
 builder.Services.AddRazorPages();
 
 builder.Configuration.AddJsonFile("appsettings.json");

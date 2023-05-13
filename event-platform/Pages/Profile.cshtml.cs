@@ -1,3 +1,4 @@
+using DAL;
 using event_platform_classLibrary;
 using event_platform_classLibrary.EventHandlers.Classes;
 using Microsoft.AspNetCore.Mvc;
@@ -7,31 +8,26 @@ namespace event_platform.Pages
 {
     public class ProfileModel : PageModel
     {
-        public UserBindModel User { get; set; }
-        private readonly IDBController _dbController;
+        private readonly UserManager _userManager;
 
-        public ProfileModel()
+        public ProfileModel(IUserDBController dBController)
         {
-            _dbController = new DBController();
+            _userManager = new UserManager(dBController);
         }
 
-        public string Username { get; set; }
-        public string id { get; set; }
-
+        [BindProperty]
+        public UserBindModel User { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
+            int userId;
 
-            //todo: make it cleaner
-            int userId = int.Parse(Request.Cookies["UserId"]);
-            string authToken = Request.Cookies["AuthToken"];
-            if (!_dbController.IsAuthTokenValid(userId, authToken))
+            if (!_userManager.IsAuthenticated(Request.Cookies, out userId))
             {
                 return RedirectToPage("/Account/Login");
             }
 
-            User user = _dbController.GetUserById(userId);
-            Username = user.Username;
+            User user = _userManager.GetAuthenticatedUser(userId);
             User = new UserBindModel
             {
                 Id = user.Id,
@@ -41,5 +37,35 @@ namespace event_platform.Pages
             };
             return Page();
         }
+
+        public IActionResult OnPost()
+        {
+            int userId;
+
+            if (!_userManager.IsAuthenticated(Request.Cookies, out userId))
+            {
+                return RedirectToPage("/Account/Login");
+            }
+
+            User user = _userManager.GetAuthenticatedUser(userId);
+
+            if (!string.IsNullOrEmpty(User.Username) && User.Username != user.Username)
+            {
+                user.Username = User.Username;
+            }
+            if (!string.IsNullOrEmpty(User.Email) && User.Email != user.Email)
+            {
+                user.Email = User.Email;
+            }
+            if (!string.IsNullOrEmpty(User.Description) && User.Description != user.Description)
+            {
+                user.Description = User.Description;
+            }
+
+            _userManager.UpdateUser(user);
+
+            return RedirectToPage();
+        }
+
     }
 }

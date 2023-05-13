@@ -17,8 +17,8 @@ namespace event_platform_classLibrary
         public string EventType { get; set; }
         public int Capacity { get; set; }
 
-        //todo create db table for bookings/registration and insure that there is enough space for booking.
-        public List<Booking> Bookings { get; set; }
+        public List<string> tags = new List<string>();
+
 
         public Event(int id, string name, string desc,DateTime date, int price, string eventType, int capacity)
         {

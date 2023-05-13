@@ -14,7 +14,7 @@ namespace event_platform_classLibrary
             //todo add connection string with .env
             //Env.Load();
             //_connectionString = Environment.GetEnvironmentVariable("SQLSERVER_CONNECTIONSTRING");
-            _connectionString = "Server=MSI\\SQLEXPRESS;Database=smilevents;Trusted_Connection=True;TrustServerCertificate=True;";
+            _connectionString = "Server=BOGDANNIKOL1867\\SQLEXPRESS;Database=smile;Trusted_Connection=True;TrustServerCertificate=True;";
 
         }
 

@@ -1,3 +1,6 @@
+
+using DAL;
+
 using event_platform_classLibrary;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -6,14 +9,15 @@ namespace event_platform.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly IDBController _dbcontroller;
-
+        private readonly IUserDBController _dbcontroller;
+        private readonly UserManager userManager;
         [BindProperty]
         public RegisterBindModel Input { get; set; }
 
-        public RegisterModel()
+        public RegisterModel(IUserDBController dbController)
         {
-            _dbcontroller = new DBController();
+            _dbcontroller = dbController;
+            userManager = new UserManager(_dbcontroller);
         }
 
         public IActionResult OnGet()
@@ -33,13 +37,13 @@ namespace event_platform.Pages.Account
             {
                 return Page();
             }
-            if (_dbcontroller.GetUserByUsernameOrEmail(Input.Username) != null || _dbcontroller.GetUserByUsernameOrEmail(Input.Email) != null)
+            if (userManager.GetUserByUsernameOrEmail(Input.Username) != null || userManager.GetUserByUsernameOrEmail(Input.Email) != null)
             {
                 ModelState.AddModelError("", "Username or email already taken.");
                 return Page();
             }
 
-            bool success = await _dbcontroller.RegisterUserAsync(Input);
+            bool success = await userManager.RegisterUserAsync(Input);
             if (success)
             {
                 return RedirectToPage("/Account/Login");
@@ -50,5 +54,3 @@ namespace event_platform.Pages.Account
         }
     }
 }
-
-

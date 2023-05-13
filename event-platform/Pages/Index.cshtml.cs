@@ -1,4 +1,5 @@
-﻿using event_platform_classLibrary;
+﻿using DAL;
+using event_platform_classLibrary;
 using event_platform_classLibrary.EventHandlers.Classes;
 using event_platform_classLibrary.EventHandlers.UserStrategy;
 using Microsoft.AspNetCore.Identity;
@@ -14,11 +15,16 @@ namespace event_platform.Pages
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly IDBController _dbController;
+        private readonly IUserDBController userDbController;
 
-        public IndexModel(ILogger<IndexModel> logger)
+        private readonly event_platform_classLibrary.UserManager _userManager;
+
+        public IndexModel(ILogger<IndexModel> logger, IUserDBController user, IDBController events)
         {
             _logger = logger;
-            _dbController = new DBController();
+            userDbController = user;
+            _dbController = events;
+            _userManager = new event_platform_classLibrary.UserManager(userDbController);
         }
 
         public string Username { get; set; }
@@ -30,28 +36,22 @@ namespace event_platform.Pages
 
         public IActionResult OnGet()
         {
+            int userId;
             //check if there are no cookies, if true --> logout
-            if (Request.Cookies["AuthToken"] == null || Request.Cookies["UserId"] == null)
+            if (!_userManager.IsAuthenticated(Request.Cookies, out userId))
             {
                 return RedirectToPage("/Account/Login");
             }
 
             //if there are cookies, validate them with the db, if !false -> logout
-            int userId = int.Parse(Request.Cookies["UserId"]);
-            string authToken = Request.Cookies["AuthToken"];
-            if (!_dbController.IsAuthTokenValid(userId, authToken))
-            {
-                return RedirectToPage("/Account/Login");
-            }
-
-            //populate the page.
-            User user = _dbController.GetUserById(userId);
+            User user = _userManager.GetAuthenticatedUser(userId);
             Username = user.Username;
             ViewData["Email"] = user.Email;
             ViewData["Description"] = user.Description;
 
-            var _userManager = new UserManager(new UserWebStrategy(_dbController));
-            (List<Event> events, List<ConcertEvent> concerts) = _dbController.GetListOfEvents(); _userManager.GetEvents();
+
+            var testManager = new event_platform_classLibrary.EventHandlers.UserStrategy.UserManager(new UserWebStrategy(_dbController));
+            (List<Event> events, List<ConcertEvent> concerts) = _dbController.GetListOfEvents(); testManager.GetEvents();
 
             Events = events.Where(e => !(e is ConcertEvent && ShowOnlyConcerts)).ToList();
 
