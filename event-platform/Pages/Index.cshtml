@@ -4,6 +4,8 @@
 @{
     ViewData["Title"] = "Home page";
 }
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/css/bootstrap.min.css">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.bundle.min.js"></script>
 
 <style>
     body {
@@ -78,9 +80,6 @@
 
 </style>
 
-
-
-
 <div class="text-center">
     @if (!string.IsNullOrEmpty(Model.Username))
     {
@@ -109,24 +108,55 @@
 
 <div class="event-container">
     @foreach (var eventItem in Model.Events)
-{
-    if (eventItem is ConcertEvent)
     {
-        <div class="event-box concert-event-box">
-            <div class="event-title">@eventItem.Name</div>
-            <div class="event-description">@eventItem.Description</div>
-            <div class="event-details">@((eventItem as ConcertEvent).Artist) @((eventItem as ConcertEvent).Venue)</div>
-            <a href="/BookEvent/@eventItem.Id" class="book-now-btn">Book Now</a>
-        </div>
+        if (eventItem is ConcertEvent concertEvent)
+        {
+            <div class="event-box concert-event-box">
+                <div class="event-title">@eventItem.Name</div>
+                <div class="event-description">@eventItem.Description</div>
+                <div class="event-details">@concertEvent.Artist @concertEvent.Venue</div>
+                <button type="button" class="book-now-btn" data-bs-toggle="modal" data-bs-target="#confirmationModal" data-event-id="@eventItem.Id">Book Now</button>
+            </div>
+        }
+        else
+        {
+            <div class="event-box">
+                <div class="event-title">@eventItem.Name</div>
+                <div class="event-description">@eventItem.Description</div>
+                <button type="button" class="book-now-btn" data-bs-toggle="modal" data-bs-target="#confirmationModal" data-event-id="@eventItem.Id">Book Now</button>
+            </div>
+        }
     }
-    else
-    {
-        <div class="event-box">
-            <div class="event-title">@eventItem.Name</div>
-            <div class="event-description">@eventItem.Description</div>
-            <a href="/BookEvent/@eventItem.Id" class="book-now-btn">Book Now</a>
+</div>
+
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to book this event?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a id="confirmBookingButton" href="#" class="btn btn-primary">Confirm</a>
+            </div>
         </div>
-    }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('#confirmationModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var eventId = button.data('event-id');
+            var confirmUrl = '/BookEvent/' + eventId;
+            var confirmBookingButton = document.getElementById('confirmBookingButton');
+            confirmBookingButton.setAttribute('href', confirmUrl);
+        });
+    </script>
 }
 
-</div>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.min.js"></script>
