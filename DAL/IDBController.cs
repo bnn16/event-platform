@@ -28,6 +28,7 @@ namespace event_platform_classLibrary
         Event GetEventByIdObjObj(int id);
         string GetBookingCodeForUserEvent(int userId, int eventId);
         bool UnBookEvent(int eventId, int userId);
+        Task<bool> AddEventTags(int eventId, string tag);
     }
 }
 

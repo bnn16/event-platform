@@ -92,5 +92,10 @@ namespace event_platform_classLibrary
 
             return new string(codeArray);
         }
+
+        public async Task AddEventTagAsync(int eventId, string tag)
+        {
+            await _dbController.AddEventTags(eventId, tag);
+        }
     }
 }

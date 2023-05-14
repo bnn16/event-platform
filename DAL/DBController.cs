@@ -5,6 +5,7 @@ using System.Data;
 using static Azure.Core.HttpHeader;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Diagnostics.Tracing;
 
 
 namespace event_platform_classLibrary
@@ -679,6 +680,57 @@ namespace event_platform_classLibrary
                     return rowsAffected > 0;
                 }
             }
+        }
+
+        public async Task<bool> AddEventTags(int eventId, string tag) {
+
+            Dictionary<int, string> eventTags = new Dictionary<int, string>()
+    {
+        { 1, "Art" },
+        { 2, "Business" },
+        { 3, "Celebrity" },
+        { 4, "Charity" },
+        { 5, "Concert" },
+        { 6, "Conference" },
+        { 7, "Cultural" },
+        { 8, "Entertainment" },
+        { 9, "Fashion" },
+        { 10, "Festival" },
+        { 11, "Film" },
+        { 12, "Food" },
+        { 13, "Music" },
+        { 14, "Networking" },
+        { 15, "Performing Arts" },
+        { 16, "Sports" },
+        { 17, "Technology" },
+        { 18, "Theater" },
+        { 19, "Travel" },
+        { 20, "Comedy" }
+    };
+
+            if (eventTags.ContainsValue(tag))
+            {
+                int tagId = eventTags.FirstOrDefault(x => x.Value == tag).Key;
+
+                string insertTagQuery = "INSERT INTO EventTags (EventId, Tag) VALUES (@EventId, @TagId)";
+
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    using (var command = new SqlCommand(insertTagQuery, connection))
+                    {
+                        command.Parameters.AddWithValue("@EventId", eventId);
+                        command.Parameters.AddWithValue("@TagId", tagId);
+
+                        int rowsAffected = await command.ExecuteNonQueryAsync();
+
+                        return rowsAffected > 0;
+                    }
+                }
+            }
+
+            return false; // Tag not found in the dictionary
         }
     }
 }
