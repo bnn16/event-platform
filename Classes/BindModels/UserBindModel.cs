@@ -14,5 +14,7 @@ namespace event_platform_classLibrary
         [Required]
         [Display(Name = "Description")]
         public string Description { get; set; }
+
+        public List<string> usersTags = new List<string>();
     }
 }

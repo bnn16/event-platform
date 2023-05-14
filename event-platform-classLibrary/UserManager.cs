@@ -96,5 +96,10 @@ namespace event_platform_classLibrary
             }
             return await _userController.UpdateUserAsync(user);
         }
+
+        public void SaveUserTags(User user)
+        {
+            _userController.SaveTags(user);
+        }
     }
 }

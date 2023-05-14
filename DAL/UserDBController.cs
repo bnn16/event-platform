@@ -145,22 +145,35 @@ namespace DAL
             using (var connection = new SqlConnection(_connectionString))
             using (var command = connection.CreateCommand())
             {
-                command.CommandText = "SELECT Id, Username, Email, short_desc FROM Users WHERE Id = @UserId";
+                command.CommandText = "SELECT u.Id, u.Username, u.Email, u.short_desc, t.Tag " +
+                                      "FROM Users u " +
+                                      "LEFT JOIN UserTags t ON u.Id = t.UserId " +
+                                      "WHERE u.Id = @UserId";
                 command.Parameters.AddWithValue("@UserId", userId);
 
                 connection.Open();
 
                 using (var reader = command.ExecuteReader())
                 {
-                    if (reader.Read())
+                    while (reader.Read())
                     {
-                        user = new User
+                        if (user == null)
                         {
-                            Id = reader.GetInt32(0),
-                            Username = reader.GetString(1),
-                            Email = reader.GetString(2),
-                            Description = reader.IsDBNull(3) ? null : reader.GetString(3)
-                        };
+                            user = new User
+                            {
+                                Id = reader.GetInt32(0),
+                                Username = reader.GetString(1),
+                                Email = reader.GetString(2),
+                                Description = reader.IsDBNull(3) ? null : reader.GetString(3),
+                                usersTags = new List<string>()
+                            };
+                        }
+
+                        string tag = reader.IsDBNull(4) ? null : reader.GetString(4);
+                        if (!string.IsNullOrEmpty(tag))
+                        {
+                            user.usersTags.Add(tag);
+                        }
                     }
                 }
             }
@@ -236,5 +249,56 @@ namespace DAL
                 }
             }
         }
+
+        public void SaveTags(User user)
+        {
+            if (user.usersTags.Contains("0"))
+            {
+                // Clear the existing user tags
+                string clearTagsQuery = "DELETE FROM UserTags WHERE UserId = @UserId";
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    connection.Open();
+
+                    using (var command = new SqlCommand(clearTagsQuery, connection))
+                    {
+                        command.Parameters.AddWithValue("@UserId", user.Id);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+
+            else
+            {
+                string clearTagsQuery = "DELETE FROM UserTags WHERE UserId = @UserId";
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    connection.Open();
+
+                    using (var command = new SqlCommand(clearTagsQuery, connection))
+                    {
+                        command.Parameters.AddWithValue("@UserId", user.Id);
+                        command.ExecuteNonQuery();
+                    }
+                }
+                // Insert the new user tags
+                string insertTagsQuery = "INSERT INTO UserTags (UserId, Tag) VALUES (@UserId, @Tag)";
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    connection.Open();
+
+                    foreach (var tagId in user.usersTags)
+                    {
+                        using (var command = new SqlCommand(insertTagsQuery, connection))
+                        {
+                            command.Parameters.AddWithValue("@UserId", user.Id);
+                            command.Parameters.AddWithValue("@Tag", tagId);
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }

@@ -13,6 +13,26 @@
                 <div class="card-body">
                     <p class="card-text text-dark">Your email: @Model.User.Email</p>
                     <p class="card-text">Your Description: <br /> @Model.User.Description</p>
+                    <p class="card-text">Your Tags:</p>
+                    <ul>
+                        @if (Model.User.usersTags.Count == 0)
+                        {
+                            <li>You have no tags :(</li>
+                        
+                        }
+                        else{
+                        @foreach (var tagId in Model.User.usersTags)
+                        {
+                            int key;
+                            if (int.TryParse(tagId, out key))
+                            {
+                                <li>@Model.EventTags.GetValueOrDefault(key, string.Empty)</li>
+                            }
+                        }
+                        }
+                    </ul>
+
+
                 </div>
             </div>
             <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#editModal">
@@ -44,6 +64,26 @@
                         <label for="description" class="form-label">Description:</label>
                         <textarea class="form-control" id="description" name="description" placeholder="@Model.User.Description"></textarea>
                     </div>
+                    
+                    <div class="mb-3">
+                        <label for="selectedTags" class="form-label">Selected Tags:</label>
+                        <p style="color:darkred">Hold down the Ctrl (Windows) or Command (Mac) button to select multiple options.</p>
+                        <select class="form-select" id="selectedTags" name="selectedTags" asp-for="SelectedTags" multiple>
+                            @foreach (var tag in Model.EventTags)
+                            {
+                                if (Model.SelectedTags.Contains(tag.Key))
+                                {
+                                    <option value="@tag.Key" selected>@tag.Value</option>
+                                }
+                                else
+                                {
+                                    <option value="@tag.Key">@tag.Value</option>
+                                }
+                            }
+                        </select>
+
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

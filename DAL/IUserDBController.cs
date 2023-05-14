@@ -18,5 +18,6 @@ namespace DAL
         void InsertSickLeave(int userId, DateTime start, DateTime end, string description);
 
         Task<bool> UpdateUserAsync(User user);
+        void SaveTags(User user);
     }
 }
