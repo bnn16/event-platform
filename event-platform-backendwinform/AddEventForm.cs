@@ -1,6 +1,5 @@
 ﻿using event_platform_classLibrary;
-using event_platform_classLibrary.EventHandlers;
-using event_platform_classLibrary.EventHandlers.EventStrategy.EventStrategy;
+
 
 namespace event_platform_backendwinform
 {
@@ -8,17 +7,18 @@ namespace event_platform_backendwinform
     {
         private TextBox[] textBoxes;
         private readonly IDBController _dbController;
+        private readonly EventManager _eventManager;
+
         public AddEventForm(IDBController dbController)
         {
             InitializeComponent();
             textBoxes = new TextBox[] { txtBoxArtist, txtBoxConcertID, Capacity, txtBoxConcertName, txtBoxID, txtBoxName, txtBoxName, txtBoxVenue };
             _dbController = dbController;
+            _eventManager = new EventManager(_dbController);
         }
 
         private async void button1_ClickAsync(object sender, EventArgs e)
         {
-            var _eventManager = new EventManager(new EventStrategy(_dbController));
-
             var eventObj = _eventManager.CreateEvent(Convert.ToInt32(txtBoxID.Text), txtBoxName.Text, rbTxtBoxDescription.Text, dateTimePicker1.Value, Convert.ToInt32(numPrice.Text), "Event", Convert.ToInt32(Capacity.Text));
 
             try
@@ -26,12 +26,7 @@ namespace event_platform_backendwinform
                 bool a = await _eventManager.AddEventAsync(eventObj);
                 if (a == true)
                 {
-                    foreach (TextBox textBox in textBoxes)
-                    {
-                        rtxtBoxConcertDescription.Clear();
-                        rbTxtBoxDescription.Clear();
-                        textBox.Clear();
-                    }
+                    ClearTextBoxes();
                     MessageBox.Show("Event added!", "Congrats!!!!");
                 }
             }
@@ -43,7 +38,6 @@ namespace event_platform_backendwinform
 
         private async void button2_Click(object sender, EventArgs e)
         {
-            var _eventManager = new EventManager(new ConcertEventStrategy(_dbController));
             var concertEvent = _eventManager.CreateConcertEvent(Convert.ToInt32(txtBoxConcertID.Text), txtBoxConcertName.Text, rtxtBoxConcertDescription.Text, dateTimePicker2.Value, Convert.ToInt32(numPriceConcert.Text), "Concert", Convert.ToInt32(CapacityConcert.Text), txtBoxArtist.Text, txtBoxVenue.Text);
 
             try
@@ -51,12 +45,7 @@ namespace event_platform_backendwinform
                 bool a = await _eventManager.AddConcertAsync(concertEvent);
                 if (a == true)
                 {
-                    foreach (TextBox textBox in textBoxes)
-                    {
-                        rtxtBoxConcertDescription.Clear();
-                        rbTxtBoxDescription.Clear();
-                        textBox.Clear();
-                    }
+                    ClearTextBoxes();
                     MessageBox.Show("Concert added!", "Congrats!!!! Let's rock and roll!");
                 }
             }
@@ -66,5 +55,14 @@ namespace event_platform_backendwinform
             }
         }
 
+        private void ClearTextBoxes()
+        {
+            foreach (TextBox textBox in textBoxes)
+            {
+                textBox.Clear();
+            }
+            rtxtBoxConcertDescription.Clear();
+            rbTxtBoxDescription.Clear();
+        }
     }
 }

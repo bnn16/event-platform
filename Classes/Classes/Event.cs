@@ -1,11 +1,4 @@
-﻿using event_platform_classLibrary.EventHandlers.Classes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace event_platform_classLibrary
+﻿namespace event_platform_classLibrary
 {
     public class Event
     {
@@ -17,10 +10,12 @@ namespace event_platform_classLibrary
         public string EventType { get; set; }
         public int Capacity { get; set; }
 
+        public decimal pricedecimal { get; set; }
+
         public List<string> tags = new List<string>();
 
 
-        public Event(int id, string name, string desc,DateTime date, int price, string eventType, int capacity)
+        public Event(int id, string name, string desc, DateTime date, int price, string eventType, int capacity)
         {
             Id = id;
             Name = name;

@@ -1,7 +1,6 @@
 using DAL;
-using event_platform_classLibrary.EventHandlers.Classes;
 using event_platform_classLibrary;
-
+using event_platform_classLibrary.EventHandlers.Classes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -10,15 +9,18 @@ namespace event_platform.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly IUserDBController _dbController;
+        private readonly IDBController eventController;
         private UserManager _userManager;
 
         [BindProperty]
         public LoginBindModel Input { get; set; }
 
-        public LoginModel(IUserDBController dbController)
+        public LoginModel(IUserDBController dbController, IDBController eventController)
         {
             _dbController = dbController;
-            _userManager = new UserManager(_dbController);
+            eventController = eventController;
+            _userManager = new UserManager(_dbController, eventController);
+
         }
 
         public IActionResult OnGet()

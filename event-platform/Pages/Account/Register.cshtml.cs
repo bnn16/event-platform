@@ -10,14 +10,17 @@ namespace event_platform.Pages.Account
     public class RegisterModel : PageModel
     {
         private readonly IUserDBController _dbcontroller;
+        private readonly IDBController eventController;
         private readonly UserManager userManager;
         [BindProperty]
         public RegisterBindModel Input { get; set; }
 
-        public RegisterModel(IUserDBController dbController)
+        public RegisterModel(IUserDBController dbController, IDBController _eventController)
         {
             _dbcontroller = dbController;
-            userManager = new UserManager(_dbcontroller);
+            eventController = _eventController;
+            userManager = new UserManager(_dbcontroller, eventController);
+
         }
 
         public IActionResult OnGet()

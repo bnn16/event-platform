@@ -1,9 +1,116 @@
 ﻿@page
 @model ProfileModel
-
+@using event_platform_classLibrary.EventHandlers.Classes
 @{
     ViewData["Title"] = "Profile";
 }
+
+
+<style>
+    body {
+        background-color: #FFFFFF;
+        color: #031147;
+        font-family: Arial, sans-serif;
+    }
+
+    .event-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 20px;
+    }
+
+    .event-box {
+        width: 300px;
+        background-color: #FBE2B0;
+        border: 1px solid #FBAE17;
+        padding: 20px;
+        margin: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 5px;
+    }
+
+    .event-title {
+        margin-top: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #EC4067;
+    }
+
+    .event-description {
+        margin-top: 10px;
+        text-align: center;
+        color: #031147;
+    }
+
+    .book-now-btn {
+        margin-top: 10px;
+        padding: 5px 10px;
+        background-color: #EC4067;
+        color: #FFFFFF;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+        .book-now-btn:hover {
+            background-color: #031147;
+            color: #FBE2B0;
+        }
+
+    #btncolor {
+        background-color: #EC4067;
+        color: #FFFFFF;
+        text-decoration: none;
+        border-style: none;
+    }
+
+        #btncolor:hover {
+            background-color: #FBE2B0;
+            color: #031147;
+        }
+
+</style>
+
+
+
+<h1 class="align-self-lg-center">Your Events!</h1>
+
+<div class="event-container">
+    @foreach (var eventItem in Model.Events)
+    {
+        if (eventItem is ConcertEvent)
+        {
+            <div class="event-box concert-event-box">
+                <div class="event-title">@eventItem.Name</div>
+                <div class="event-description">@eventItem.Description</div>
+                <div class="event-details">@((eventItem as ConcertEvent).Artist) @((eventItem as ConcertEvent).Venue)</div>
+                @if (Model.BookingCodes.ContainsKey(eventItem.Id))
+                {
+                    <div class="booking-code">Booking Code: @Model.BookingCodes[eventItem.Id]</div>
+                }
+
+                <a href="/UnBookEvent/@eventItem.Id" class="book-now-btn">Cancel Event</a>
+            </div>
+        }
+        else
+        {
+            <div class="event-box">
+                <div class="event-title">@eventItem.Name</div>
+                <div class="event-description">@eventItem.Description</div>
+                @if (Model.BookingCodes.ContainsKey(eventItem.Id))
+                {
+                    <div class="booking-code">Booking Code: @Model.BookingCodes[eventItem.Id]</div>
+                }
+                <a href="/UnBookEvent/@eventItem.Id" class="book-now-btn">Cancel Event</a>
+            </div>
+        }
+    }
+</div>
+
+
+
 
 <div class="container mt-5">
     <h1 class="mb-4">Profile information</h1>
@@ -41,6 +148,8 @@
         </div>
     </div>
 </div>
+
+
 
 <!-- Edit Personal Information Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">

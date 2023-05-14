@@ -3,6 +3,7 @@ using event_platform_classLibrary;
 using event_platform_classLibrary.EventHandlers.Classes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 
 namespace event_platform.Pages
 {
@@ -12,13 +13,16 @@ namespace event_platform.Pages
         public Dictionary<int, string> EventTags { get; set; }
         [BindProperty]
         public List<int> SelectedTags { get; set; }
+        public List<Event> Events { get; set; }
+
+        public Dictionary<int, string> BookingCodes { get; set; }
 
 
-
-        public ProfileModel(IUserDBController dBController)
+        public ProfileModel(IUserDBController dBController, IDBController eventController)
         {
-            _userManager = new UserManager(dBController);
+            _userManager = new UserManager(dBController, eventController);
             SelectedTags = new List<int>();
+            BookingCodes = new Dictionary<int, string>();
         }
 
         [BindProperty]
@@ -67,6 +71,20 @@ namespace event_platform.Pages
         { 19, "Travel" },
         { 20, "Comedy" }
     };
+
+            (List<Event> events, List<ConcertEvent> concerts) = _userManager.GetEventsUser(User.Id);
+
+            Events = events;
+            Events.AddRange(concerts);
+
+            foreach (var ev in Events)
+            {
+
+                string bookingCode = _userManager.GetBookingCodeForUserEvent(userId, ev.Id);
+                BookingCodes[ev.Id] = bookingCode; // Store booking code in dictionary
+
+
+            }
 
             SelectedTags = user.usersTags.Select(int.Parse).ToList();
             return Page();

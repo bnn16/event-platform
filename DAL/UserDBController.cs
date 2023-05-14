@@ -1,5 +1,5 @@
-﻿using event_platform_classLibrary.EventHandlers.Classes;
-using event_platform_classLibrary;
+﻿using event_platform_classLibrary;
+using event_platform_classLibrary.EventHandlers.Classes;
 using Microsoft.Data.SqlClient;
 
 namespace DAL
@@ -198,7 +198,7 @@ namespace DAL
             }
         }
 
-       
+
 
         public List<User> GetAllUsers()
         {

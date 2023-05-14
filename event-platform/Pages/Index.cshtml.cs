@@ -1,13 +1,8 @@
 ﻿using DAL;
 using event_platform_classLibrary;
 using event_platform_classLibrary.EventHandlers.Classes;
-using event_platform_classLibrary.EventHandlers.UserStrategy;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace event_platform.Pages
 {
@@ -17,14 +12,14 @@ namespace event_platform.Pages
         private readonly IDBController _dbController;
         private readonly IUserDBController userDbController;
 
-        private readonly event_platform_classLibrary.UserManager _userManager;
+        private readonly UserManager _userManager;
 
         public IndexModel(ILogger<IndexModel> logger, IUserDBController user, IDBController events)
         {
             _logger = logger;
             userDbController = user;
             _dbController = events;
-            _userManager = new event_platform_classLibrary.UserManager(userDbController);
+            _userManager = new UserManager(userDbController, events);
         }
 
         public string Username { get; set; }
@@ -50,8 +45,7 @@ namespace event_platform.Pages
             ViewData["Description"] = user.Description;
 
 
-            var testManager = new event_platform_classLibrary.EventHandlers.UserStrategy.UserManager(new UserWebStrategy(_dbController));
-            (List<Event> events, List<ConcertEvent> concerts) = _dbController.GetListOfEvents(); testManager.GetEvents();
+            (List<Event> events, List<ConcertEvent> concerts) = _userManager.GetEvents();
 
             Events = events.Where(e => !(e is ConcertEvent && ShowOnlyConcerts)).ToList();
 

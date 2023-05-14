@@ -1,6 +1,6 @@
 ﻿
-using event_platform_classLibrary.EventHandlers.Classes;
 using event_platform_classLibrary;
+using event_platform_classLibrary.EventHandlers.Classes;
 
 namespace DAL
 {

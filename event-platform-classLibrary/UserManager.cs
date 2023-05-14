@@ -7,10 +7,12 @@ namespace event_platform_classLibrary
     public class UserManager
     {
         private readonly IUserDBController _userController;
+        private readonly IDBController _dbController;
 
-        public UserManager(IUserDBController userController)
+        public UserManager(IUserDBController userController, IDBController dbController)
         {
             _userController = userController;
+            _dbController = dbController;
         }
 
         public bool IsAuthenticated(IRequestCookieCollection cookies, out int userId)
@@ -33,7 +35,6 @@ namespace event_platform_classLibrary
             return _userController.GetUserById(userId);
         }
 
-
         public bool AuthenticateUser(LoginBindModel input, out User user)
         {
             user = _userController.GetUserByUsernameOrEmail(input);
@@ -53,18 +54,14 @@ namespace event_platform_classLibrary
 
         public void SetAuthCookies(IResponseCookies cookies, User user)
         {
-            // Delete any existing auth tokens associated with the user, and add a new auth token.
             _userController.DeleteAuthToken(user.Id);
 
             var authToken = Guid.NewGuid().ToString();
             _userController.InsertAuthToken(user.Id, authToken);
 
-            // Set the auth token and user ID cookies
             cookies.Append("AuthToken", authToken, new CookieOptions { HttpOnly = true });
             cookies.Append("UserId", user.Id.ToString(), new CookieOptions { HttpOnly = true });
         }
-
-
 
         public async Task<bool> RegisterUserAsync(RegisterBindModel input)
         {
@@ -94,12 +91,63 @@ namespace event_platform_classLibrary
             {
                 return false;
             }
+
             return await _userController.UpdateUserAsync(user);
         }
 
         public void SaveUserTags(User user)
         {
             _userController.SaveTags(user);
+        }
+
+        public bool BookEvent(int eventId, int userId, string code)
+        {
+            if (HasBookedEvent(eventId, userId))
+            {
+                return false;
+            }
+
+            Event eventObj = _dbController.GetEventByIdObj(eventId);
+            if (eventObj.Capacity <= 0)
+            {
+                return false;
+            }
+
+            Booking booking = new Booking
+            {
+                UserId = userId,
+                EventId = eventId,
+            };
+            _dbController.AddBooking(booking.EventId, userId, code);
+
+            eventObj.Capacity--;
+            _dbController.UpdateEvent(eventObj);
+
+            return true;
+        }
+
+        public bool HasBookedEvent(int eventId, int userId)
+        {
+            return _dbController.HasBookedEvent(eventId, userId);
+        }
+
+        public bool UnBookevent(int eventId, int userId)
+        {
+            return _dbController.UnBookEvent(eventId,userId);
+        }
+
+        public (List<Event>, List<ConcertEvent>) GetEvents()
+        {
+            return _dbController.GetListOfEvents();
+        }
+
+         public (List<Event>, List<ConcertEvent>) GetEventsUser(int id)
+        {
+            return _dbController.GetMyEvents(id);
+        }
+
+        public string GetBookingCodeForUserEvent(int userId, int eventId) { 
+            return _dbController.GetBookingCodeForUserEvent(userId, eventId);
         }
     }
 }

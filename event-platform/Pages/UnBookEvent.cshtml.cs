@@ -1,27 +1,26 @@
+using DAL;
+using event_platform_classLibrary;
+using event_platform_classLibrary.EventHandlers.Classes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using event_platform_classLibrary;
-using DAL;
-using event_platform_classLibrary.EventHandlers.Classes;
 
 namespace event_platform.Pages
 {
-    public class BookEventModel : PageModel
+    public class UnBookEventModel : PageModel
     {
         private readonly IDBController _dbController;
         private readonly UserManager _userManager;
         private readonly EventManager _eventManager;
 
         public string Message { get; set; }
+        public Event Event { get; set; }
 
-        public BookEventModel(IDBController dbController, IUserDBController userController)
+        public UnBookEventModel(IDBController dbController, IUserDBController userController)
         {
             _dbController = dbController;
-            _userManager = new UserManager(userController,dbController);
+            _userManager = new UserManager(userController, dbController);
             _eventManager = new EventManager(_dbController);
         }
-
-        public Event Event { get; set; }
 
         public IActionResult OnGet(int id)
         {
@@ -40,17 +39,22 @@ namespace event_platform.Pages
             {
                 return NotFound();
             }
-            string code = _eventManager.GenerateRandomCode();
-            bool result = _userManager.BookEvent(Event.Id, userId, code);
+
+            bool result = _userManager.UnBookevent(Event.Id, userId);
 
             if (result)
             {
-                Message = "You have successfully booked the event. Your code for the event is - " + code;
+                Message = "You have successfully unbooked the event.";
             }
             else
             {
-                Message = "You have already booked the event.";
+                Message = "Something went wrong...";
             }
+            return Page();
+
+
+
+
             return Page();
         }
     }

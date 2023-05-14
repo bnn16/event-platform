@@ -1,10 +1,5 @@
 ﻿using event_platform_classLibrary.EventHandlers.Classes;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace event_platform_classLibrary
 {
@@ -27,9 +22,12 @@ namespace event_platform_classLibrary
         void DeleteAuthToken(int userId);
         bool IsAuthTokenValid(int userId, string authToken);
         User GetUserById(int userId);
-        bool AddBooking(int eventId, int userId);
+        bool AddBooking(int eventId, int userId, string code);
         void UpdateEvent(Event updatedEvent);
         bool HasBookedEvent(int eventId, int userId);
+        Event GetEventByIdObjObj(int id);
+        string GetBookingCodeForUserEvent(int userId, int eventId);
+        bool UnBookEvent(int eventId, int userId);
     }
 }
 

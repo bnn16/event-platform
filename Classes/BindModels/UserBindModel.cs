@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace event_platform_classLibrary
-{    
+{
     public class UserBindModel
     {
         public int Id { get; set; }
