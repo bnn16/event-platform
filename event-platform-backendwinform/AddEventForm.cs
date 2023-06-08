@@ -54,13 +54,25 @@ namespace event_platform_backendwinform
         {
             var concertEvent = _eventManager.CreateConcertEvent(Convert.ToInt32(txtBoxConcertID.Text), txtBoxConcertName.Text, rtxtBoxConcertDescription.Text, dateTimePicker2.Value, Convert.ToInt32(numPriceConcert.Text), "Concert", Convert.ToInt32(CapacityConcert.Text), txtBoxArtist.Text, txtBoxVenue.Text);
 
+            List<string> selectedTags = new List<string>();
+            foreach (var tag in checkedListBox2.CheckedItems)
+            {
+                selectedTags.Add(tag.ToString());
+            }
+
             try
             {
                 bool a = await _eventManager.AddConcertAsync(concertEvent);
                 if (a == true)
                 {
+                    foreach (var tag in selectedTags)
+                    {
+                        await _eventManager.AddEventTagAsync(concertEvent.Id, tag);
+                    }
+
                     ClearTextBoxes();
-                    MessageBox.Show("Concert added!", "Congrats!!!! Let's rock and roll!");
+                    checkedListBox1.ClearSelected();
+                    MessageBox.Show("Concert Added!", "Congrats!!!!");
                 }
             }
             catch (Exception ex)

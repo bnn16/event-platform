@@ -3,13 +3,13 @@ using event_platform_classLibrary;
 using event_platform_classLibrary.EventHandlers.Classes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 
 namespace event_platform.Pages
 {
     public class ProfileModel : PageModel
     {
-        private readonly UserManager _userManager;
+        private readonly AuthUserManager authUserManager;
+        private readonly UserManager userManager;
         public Dictionary<int, string> EventTags { get; set; }
         [BindProperty]
         public List<int> SelectedTags { get; set; }
@@ -20,9 +20,10 @@ namespace event_platform.Pages
 
         public ProfileModel(IUserDBController dBController, IDBController eventController)
         {
-            _userManager = new UserManager(dBController, eventController);
+            authUserManager = new AuthUserManager(dBController, eventController);
             SelectedTags = new List<int>();
             BookingCodes = new Dictionary<int, string>();
+            userManager = new UserManager(dBController, eventController);
         }
 
         [BindProperty]
@@ -32,12 +33,12 @@ namespace event_platform.Pages
         {
             int userId;
 
-            if (!_userManager.IsAuthenticated(Request.Cookies, out userId))
+            if (!authUserManager.IsAuthenticated(Request.Cookies, out userId))
             {
                 return RedirectToPage("/Account/Login");
             }
 
-            User user = _userManager.GetAuthenticatedUser(userId);
+            User user = authUserManager.GetAuthenticatedUser(userId);
             User = new UserBindModel
             {
                 Id = user.Id,
@@ -72,7 +73,7 @@ namespace event_platform.Pages
         { 20, "Comedy" }
     };
 
-            (List<Event> events, List<ConcertEvent> concerts) = _userManager.GetEventsUser(User.Id);
+            (List<Event> events, List<ConcertEvent> concerts) = userManager.GetEventsUser(User.Id);
 
             Events = events;
             Events.AddRange(concerts);
@@ -80,7 +81,7 @@ namespace event_platform.Pages
             foreach (var ev in Events)
             {
 
-                string bookingCode = _userManager.GetBookingCodeForUserEvent(userId, ev.Id);
+                string bookingCode = userManager.GetBookingCodeForUserEvent(userId, ev.Id);
                 BookingCodes[ev.Id] = bookingCode; // Store booking code in dictionary
 
 
@@ -94,12 +95,12 @@ namespace event_platform.Pages
         {
             int userId;
 
-            if (!_userManager.IsAuthenticated(Request.Cookies, out userId))
+            if (!authUserManager.IsAuthenticated(Request.Cookies, out userId))
             {
                 return RedirectToPage("/Account/Login");
             }
 
-            User user = _userManager.GetAuthenticatedUser(userId);
+            User user = authUserManager.GetAuthenticatedUser(userId);
 
             if (!string.IsNullOrEmpty(User.Username) && User.Username != user.Username)
             {
@@ -114,7 +115,7 @@ namespace event_platform.Pages
                 user.Description = User.Description;
             }
 
-            _userManager.UpdateUser(user);
+            authUserManager.UpdateUser(user);
 
             user.usersTags.Clear();
             foreach (var tagId in SelectedTags)
@@ -122,7 +123,7 @@ namespace event_platform.Pages
                 user.usersTags.Add(tagId.ToString());
             }
 
-            _userManager.SaveUserTags(user);
+            authUserManager.SaveUserTags(user);
 
             return RedirectToPage();
         }

@@ -1,11 +1,6 @@
-﻿using event_platform_classLibrary;
-using event_platform_classLibrary.EventHandlers.Classes;
+﻿using event_platform_classLibrary.EventHandlers.Classes;
 using Microsoft.Data.SqlClient;
 using System.Data;
-using static Azure.Core.HttpHeader;
-using System.Data.Common;
-using System.Diagnostics;
-using System.Diagnostics.Tracing;
 
 
 namespace event_platform_classLibrary
@@ -682,7 +677,8 @@ namespace event_platform_classLibrary
             }
         }
 
-        public async Task<bool> AddEventTags(int eventId, string tag) {
+        public async Task<bool> AddEventTags(int eventId, string tag)
+        {
 
             Dictionary<int, string> eventTags = new Dictionary<int, string>()
     {
@@ -731,6 +727,102 @@ namespace event_platform_classLibrary
             }
 
             return false; // Tag not found in the dictionary
+        }
+
+        public List<(int eventId, string tag)> GetAllEventTags()
+        {
+            List<(int eventId, string tag)> eventTags = new List<(int eventId, string tag)>();
+
+            // Establish a database connection
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                string query = "SELECT EventId, Tag FROM EventTags";  // Replace "YourEventTagsTable" with the actual table name
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int eventId = (int)reader["EventId"];
+                            string tag = (string)reader["Tag"];
+
+                            // Add the event tag to the list
+                            eventTags.Add((eventId, tag));
+                        }
+                    }
+                }
+            }
+
+            return eventTags;
+        }
+
+        public List<string> GetAllUserTags(int id)
+        {
+            List<string> userTags = new List<string>();
+
+            // Establish a database connection
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                string query = "SELECT Tag FROM UserTags where UserId = @id";  // Replace "YourUserTagsTable" with the actual table name
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@id", id);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string tag = (string)reader["Tag"];
+
+                            // Add the user tag to the list
+                            userTags.Add(tag);
+                        }
+                    }
+                }
+            }
+
+            return userTags;
+        }
+
+
+        public bool CheckBooking(string code)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM Bookings Where Code = @code", connection))
+                {
+
+                    command.Parameters.AddWithValue("@code", code);
+
+                    int count = (int)command.ExecuteScalar();
+
+                    return count > 0;
+                }
+
+            }
+
+        }
+
+        public void DeleteBooking(string code)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand("Delete from bookings where code = @code", connection))
+                {
+                    command.Parameters.AddWithValue("@code", code);
+
+                    command.ExecuteNonQuery();
+                }
+            }
         }
     }
 }

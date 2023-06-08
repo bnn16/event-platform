@@ -1,5 +1,7 @@
 ﻿@page
 @using event_platform_classLibrary.EventHandlers.Classes;
+@using event_platform_classLibrary;
+@using event_platform_classLibrary.Strategy
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
@@ -60,23 +62,24 @@
             color: #FBE2B0;
         }
 
-    #btncolor{
-            background-color: #EC4067;
+    #btncolor {
+        background-color: #EC4067;
         color: #FFFFFF;
         text-decoration: none;
         border-style: none;
     }
 
-    #btncolor:hover {
-        background-color: #FBE2B0;
-        color: #031147;
-    }
+        #btncolor:hover {
+            background-color: #FBE2B0;
+            color: #031147;
+        }
+
     .text-center {
-  position: absolute;
-  top: 16px;
-  right: 90px;
-  z-index: 9995;
-}
+        position: absolute;
+        top: 16px;
+        right: 90px;
+        z-index: 9995;
+    }
 
 </style>
 
@@ -87,8 +90,50 @@
     }
 </div>
 
-<h1 class="display-4">Welcome!</h1>
-<h2>Events</h2>
+<h1 style="text-align:center;" class="display-4">Welcome!</h1>
+
+
+
+<h1 style="text-align:center;">What we think your Top 5 events are</h1>
+<div class="event-container">
+    @foreach (var (user, eventRatios) in ViewData["UserEventRatios"] as List<(User, List<(Event, float)>)>)
+    {
+        int i = 1;
+        @foreach ((Event evt, float ratio) in eventRatios.Take(5).Reverse())
+        {
+            <div class="event-box concert-event-box">
+                <div class="event-title">#@i @evt.Name</div>
+                <div><span style="color:#EC4067">Price:</span> @(evt.Price == 0 ? "free" : evt.Price.ToString())</div>
+                <div class="event-description">@evt.Description</div>
+                <button type="button" class="book-now-btn" data-bs-toggle="modal" data-bs-target="#confirmationModal" data-event-id="@evt.Id">Book Now</button>
+            </div>
+            i++;
+        }
+    }
+</div>
+
+<br />
+
+<h1 style="text-align:center;">Indulge in Opulence: Discover the Top 5 High-End Events</h1>
+<div class="event-container">
+    @foreach (var (user, eventRatios) in ViewData["PriceRatios"] as List<(User, List<(Event, float)>)>)
+    {
+        int i = 1;
+        @foreach ((Event evt, float ratio) in eventRatios.Take(5))
+        {
+            <div class="event-box concert-event-box">
+                <div class="event-title">#@i @evt.Name</div>
+                <div><span style="color:#EC4067">Price:</span> @(evt.Price == 0 ? "free" : evt.Price.ToString())</div>
+                <div class="event-description">@evt.Description</div>
+                <button type="button" class="book-now-btn" data-bs-toggle="modal" data-bs-target="#confirmationModal" data-event-id="@evt.Id">Book Now</button>
+            </div>
+            i++;
+        }
+    }
+</div>
+
+
+<h2>All Events</h2>
 
 <form method="get">
     <div class="form-check">
@@ -97,6 +142,31 @@
             Show only concerts
         </label>
     </div>
+
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" asp-for="ShowOnlyPrice" id="showOnlyPrice" />
+        <label class="form-check-label" for="showOnlyPrice">Show only priced events</label>
+    </div>
+    <div class="form-group">
+        <label for="priceRange">Price Range:</label>
+        <input type="text" class="form-control" id="priceRange" />
+    </div>
+    <button type="button" id="clearPriceRangeButton" class="btn btn-secondary" style="background-color: #EC4067;
+        color: #FFFFFF;
+        text-decoration: none;
+        border-style: none; margin-top: 10px;">
+        Clear
+    </button>
+
+    <div class="form-group">
+        <input type="hidden" asp-for="lowerBound" />
+        <input type="hidden" asp-for="upperBound" />
+    </div>
+    <br/>
+    <br />
+
+
+
 
     <div class="form-group">
         <label for="searchTitle">Search by title:</label>
@@ -109,25 +179,35 @@
 <div class="event-container">
     @foreach (var eventItem in Model.Events)
     {
-        if (eventItem is ConcertEvent concertEvent)
-        {
-            <div class="event-box concert-event-box">
-                <div class="event-title">@eventItem.Name</div>
-                <div class="event-description">@eventItem.Description</div>
-                <div class="event-details">@concertEvent.Artist @concertEvent.Venue</div>
-                <button type="button" class="book-now-btn" data-bs-toggle="modal" data-bs-target="#confirmationModal" data-event-id="@eventItem.Id">Book Now</button>
-            </div>
-        }
-        else
-        {
-            <div class="event-box">
-                <div class="event-title">@eventItem.Name</div>
-                <div class="event-description">@eventItem.Description</div>
-                <button type="button" class="book-now-btn" data-bs-toggle="modal" data-bs-target="#confirmationModal" data-event-id="@eventItem.Id">Book Now</button>
-            </div>
-        }
+
+            if (eventItem is ConcertEvent concertEvent)
+            {
+                <div class="event-box concert-event-box">
+                    <div class="event-title">@eventItem.Name</div>
+                    <div><span style="color:#EC4067">Price:</span> @(
+            eventItem.Price == 0 ? "free" : eventItem.Price.ToString()
+            )</div>
+                    <div class="event-description">@eventItem.Description</div>>
+                    <div class="event-details">@concertEvent.Artist @concertEvent.Venue</div>
+                    <button type="button" class="book-now-btn" data-bs-toggle="modal" data-bs-target="#confirmationModal" data-event-id="@eventItem.Id">Book Now</button>
+                </div>
+            }
+            else
+            {
+                <div class="event-box">
+                    <div class="event-title">@eventItem.Name</div>
+                    <div><span style="color:#EC4067">Price:</span> @(
+            eventItem.Price == 0 ? "free" : eventItem.Price.ToString()
+            )</div>
+                    <div class="event-description">@eventItem.Description</div>
+                    <button type="button" class="book-now-btn" data-bs-toggle="modal" data-bs-target="#confirmationModal" data-event-id="@eventItem.Id">Book Now</button>
+                </div>
+            }
+        
     }
 </div>
+
+
 
 <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -140,8 +220,8 @@
                 <p>Are you sure you want to book this event?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <a id="confirmBookingButton" href="#" class="btn btn-primary">Confirm</a>
+                <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a id="confirmBookingButton" href="#" class="btn btn-primary" id="btncolor">Confirm</a>
             </div>
         </div>
     </div>
@@ -155,6 +235,37 @@
             var confirmUrl = '/BookEvent/' + eventId;
             var confirmBookingButton = document.getElementById('confirmBookingButton');
             confirmBookingButton.setAttribute('href', confirmUrl);
+        });
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var lowerBound = parseFloat("@Model.lowerBound");
+            var upperBound = parseFloat("@Model.upperBound");
+
+            $("#priceRange").ionRangeSlider({
+                type: "double",
+                min: 0,
+                max: 100,
+                from: lowerBound,
+                to: upperBound,
+                step: 1,
+                prettify_enabled: true,
+                prettify_separator: ",",
+                onFinish: function (data) {
+                    $("#lowerBound").val(data.from);
+                    $("#upperBound").val(data.to);
+                }
+            });
+
+            $("#clearPriceRangeButton").click(function () {
+                $("#priceRange").data("ionRangeSlider").reset();
+                $("#lowerBound").val(0);
+                $("#upperBound").val(0);
+            });
         });
     </script>
 }

@@ -21,5 +21,11 @@ namespace event_platform_backendwinform
             ViewAllEvents newForm = new ViewAllEvents(_dbController);
             newForm.Show();
         }
+
+        private void checkBookingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CheckBooking newForm = new CheckBooking(_dbController);
+            newForm.Show();
+        }
     }
 }

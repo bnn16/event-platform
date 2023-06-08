@@ -32,17 +32,19 @@
             toolStripMenuItem1 = new ToolStripMenuItem();
             addEventToolStripMenuItem = new ToolStripMenuItem();
             viewAllEventsToolStripMenuItem = new ToolStripMenuItem();
-            usersToolStripMenuItem = new ToolStripMenuItem();
+            checkBookingToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
             // 
             menuStrip1.BackColor = SystemColors.ActiveCaption;
-            menuStrip1.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, usersToolStripMenuItem });
+            menuStrip1.ImageScalingSize = new Size(32, 32);
+            menuStrip1.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, checkBookingToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(800, 40);
+            menuStrip1.Padding = new Padding(11, 4, 0, 4);
+            menuStrip1.Size = new Size(1486, 44);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -52,7 +54,7 @@
             toolStripMenuItem1.Image = Properties.Resources.icons8_events_32;
             toolStripMenuItem1.ImageScaling = ToolStripItemImageScaling.None;
             toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(85, 36);
+            toolStripMenuItem1.Size = new Size(135, 38);
             toolStripMenuItem1.Text = "Events";
             // 
             // addEventToolStripMenuItem
@@ -60,7 +62,7 @@
             addEventToolStripMenuItem.Image = Properties.Resources.icons8_add_32;
             addEventToolStripMenuItem.ImageScaling = ToolStripItemImageScaling.None;
             addEventToolStripMenuItem.Name = "addEventToolStripMenuItem";
-            addEventToolStripMenuItem.Size = new Size(196, 38);
+            addEventToolStripMenuItem.Size = new Size(306, 44);
             addEventToolStripMenuItem.Text = "Add Event";
             addEventToolStripMenuItem.Click += addEventToolStripMenuItem_Click;
             // 
@@ -69,30 +71,31 @@
             viewAllEventsToolStripMenuItem.Image = Properties.Resources.icons8_spreadsheet_32;
             viewAllEventsToolStripMenuItem.ImageScaling = ToolStripItemImageScaling.None;
             viewAllEventsToolStripMenuItem.Name = "viewAllEventsToolStripMenuItem";
-            viewAllEventsToolStripMenuItem.Size = new Size(196, 38);
+            viewAllEventsToolStripMenuItem.Size = new Size(306, 44);
             viewAllEventsToolStripMenuItem.Text = "View all events";
             viewAllEventsToolStripMenuItem.Click += viewAllEventsToolStripMenuItem_Click;
             // 
-            // usersToolStripMenuItem
+            // checkBookingToolStripMenuItem
             // 
-            usersToolStripMenuItem.BackColor = SystemColors.ActiveCaption;
-            usersToolStripMenuItem.Image = Properties.Resources.icons8_google_groups_32;
-            usersToolStripMenuItem.ImageScaling = ToolStripItemImageScaling.None;
-            usersToolStripMenuItem.Name = "usersToolStripMenuItem";
-            usersToolStripMenuItem.Size = new Size(79, 36);
-            usersToolStripMenuItem.Text = "Users";
+            checkBookingToolStripMenuItem.Image = Properties.Resources.icons8_spreadsheet_32;
+            checkBookingToolStripMenuItem.ImageScaling = ToolStripItemImageScaling.None;
+            checkBookingToolStripMenuItem.Name = "checkBookingToolStripMenuItem";
+            checkBookingToolStripMenuItem.Size = new Size(226, 38);
+            checkBookingToolStripMenuItem.Text = "Check Booking";
+            checkBookingToolStripMenuItem.Click += checkBookingToolStripMenuItem_Click;
             // 
-            // Form1
+            // MainForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources._1600x600_events_background;
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1486, 960);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
-            Name = "Form1";
-            Text = "Form1";
+            Margin = new Padding(6);
+            Name = "MainForm";
+            Text = "Home";
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ResumeLayout(false);
@@ -105,6 +108,6 @@
         private ToolStripMenuItem toolStripMenuItem1;
         private ToolStripMenuItem addEventToolStripMenuItem;
         private ToolStripMenuItem viewAllEventsToolStripMenuItem;
-        private ToolStripMenuItem usersToolStripMenuItem;
+        private ToolStripMenuItem checkBookingToolStripMenuItem;
     }
 }

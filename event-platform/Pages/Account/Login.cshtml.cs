@@ -10,7 +10,7 @@ namespace event_platform.Pages.Account
     {
         private readonly IUserDBController _dbController;
         private readonly IDBController eventController;
-        private UserManager _userManager;
+        private AuthUserManager _userManager;
 
         [BindProperty]
         public LoginBindModel Input { get; set; }
@@ -19,7 +19,7 @@ namespace event_platform.Pages.Account
         {
             _dbController = dbController;
             eventController = eventController;
-            _userManager = new UserManager(_dbController, eventController);
+            _userManager = new AuthUserManager(_dbController, eventController);
 
         }
 

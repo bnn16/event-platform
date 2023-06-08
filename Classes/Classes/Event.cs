@@ -25,6 +25,10 @@
             EventType = eventType;
             Capacity = capacity;
         }
+
+        public Event()
+        {
+        }
     }
 }
 

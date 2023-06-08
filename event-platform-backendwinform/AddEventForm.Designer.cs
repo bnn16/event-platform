@@ -63,6 +63,8 @@
             rtxtBoxConcertDescription = new RichTextBox();
             txtBoxConcertName = new TextBox();
             txtBoxConcertID = new TextBox();
+            label16 = new Label();
+            checkedListBox2 = new CheckedListBox();
             Event.SuspendLayout();
             AddEventPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numPrice).BeginInit();
@@ -247,6 +249,8 @@
             // tabPage2
             // 
             tabPage2.BackColor = SystemColors.ActiveCaption;
+            tabPage2.Controls.Add(label16);
+            tabPage2.Controls.Add(checkedListBox2);
             tabPage2.Controls.Add(txtBoxVenue);
             tabPage2.Controls.Add(txtBoxArtist);
             tabPage2.Controls.Add(label14);
@@ -428,6 +432,23 @@
             txtBoxConcertID.Size = new Size(182, 39);
             txtBoxConcertID.TabIndex = 17;
             // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(706, 536);
+            label16.Name = "label16";
+            label16.Size = new Size(60, 32);
+            label16.TabIndex = 35;
+            label16.Text = "Tags";
+            // 
+            // checkedListBox2
+            // 
+            checkedListBox2.FormattingEnabled = true;
+            checkedListBox2.Location = new Point(712, 576);
+            checkedListBox2.Name = "checkedListBox2";
+            checkedListBox2.Size = new Size(300, 436);
+            checkedListBox2.TabIndex = 34;
+            // 
             // AddEventForm
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
@@ -485,5 +506,7 @@
         private Label label13;
         private Label label15;
         private CheckedListBox checkedListBox1;
+        private Label label16;
+        private CheckedListBox checkedListBox2;
     }
 }

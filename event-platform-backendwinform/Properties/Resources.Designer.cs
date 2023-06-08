@@ -73,6 +73,16 @@ namespace event_platform_backendwinform.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap dbzm7pd_af05d0c6_e3dc_430f_bb44_f5039717a066 {
+            get {
+                object obj = ResourceManager.GetObject("dbzm7pd-af05d0c6-e3dc-430f-bb44-f5039717a066", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icons8_add_32 {
             get {
                 object obj = ResourceManager.GetObject("icons8-add-32", resourceCulture);

@@ -67,7 +67,8 @@ namespace event_platform_classLibrary
             return await _dbController.AddEventAsync(eventObj);
         }
 
-        public Event GetEventObj(int id) { 
+        public Event GetEventObj(int id)
+        {
             return _dbController.GetEventByIdObjObj(id);
         }
 
@@ -75,6 +76,15 @@ namespace event_platform_classLibrary
         {
             Random random = new Random();
             string randomCode = GenerateRandomString(5); // Generate a random string of length 5
+            bool exists = CheckBooking(randomCode);
+            while (exists)
+            {
+                randomCode = GenerateRandomString(5);
+                if (!CheckBooking(randomCode))
+                {
+                    break;
+                }
+            }
 
             return "#" + randomCode;
         }
@@ -97,5 +107,27 @@ namespace event_platform_classLibrary
         {
             await _dbController.AddEventTags(eventId, tag);
         }
+
+
+        public List<(int userId, string tag)> GetAllEventTags()
+        {
+            return _dbController.GetAllEventTags();
+        }
+
+        public List<string> GetAllUserTags(int userId)
+        {
+            return _dbController.GetAllUserTags(userId);
+        }
+
+        public bool CheckBooking(string code)
+        {
+            return _dbController.CheckBooking(code);
+        }
+
+        public void DeleteBooking(string code)
+        {
+            _dbController.DeleteBooking(code);
+        }
+
     }
 }
